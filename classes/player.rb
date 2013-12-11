@@ -1,8 +1,9 @@
 class Player
-  attr_accessor :name, :chips, :bet, :cards, :stats
+  attr_accessor :name, :chips, :bet, :cards, :stats, :finished
 
   def initialize
-    @cards = []
+    @finished = false
+    @cards    = []
   end
 
   def card_count
