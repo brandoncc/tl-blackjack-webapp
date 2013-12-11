@@ -64,6 +64,15 @@ def ongoing_game_exists
   if !(@game.nil? || @player.nil?)
     exists = !@player.name.nil? || @player.name.strip.length.nonzero?
   end
+
+def ongoing_hand_exists
+  exists = false
+
+  if !(@game.nil? || @player.nil?)
+    exists ||= @player.card_count > 0
+  end
+
+  return exists
 end
 
 before do
@@ -90,7 +99,7 @@ end
 
 get '/bet' do
   redirect to('/') if @player.nil? || @player.name.nil?
-  erb :bet, locals: {already_playing_hand: @player.cards.count.nonzero?}
+  erb :bet, locals: { already_playing_hand: ongoing_hand_exists }
 end
 
 post '/bet' do
@@ -107,6 +116,7 @@ end
 get '/game' do
   redirect to('/') if @player.nil? || @player.name.nil? || @player.name.strip.length.zero?
   redirect to('/bet') if @player.bet.nil? || @player.bet.to_i.zero?
+  ongoing_hand_exists ? @game.resume_hand : @game.play_hand
   erb :game
 end
 
