@@ -1,5 +1,15 @@
-<div id="dealer-cards" class="well span12"></div>
-<div id="dealer-status"></div>
+<div id="dealer-cards" class="well span12">
+  <% if @player.finished %>
+      <% @dealer.cards.each do |card| %>
+          <img src="<%= "#{card.image}" %>" class="playing-card span2"/>
+      <% end %>
+  <% else %>
+      <img src="<%= "#{@dealer.cards.first.image}" %>" class="playing-card span2"/>
+      <img src="<%= "/images/cards/cover.jpg" %>" class="playing-card span2"/>
+  <% end %>
+</div>
+<div id="dealer-status">
+</div>
 <div id="player-cards" class="well span12">
   <% @player.cards.each do |card| %>
       <img src="<%= "#{card.image}" %>" class="playing-card span2"/>
