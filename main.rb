@@ -112,6 +112,7 @@ end
 
 get '/reset_game' do
   @player.chips = 250
+  @player.bet = 0
   @player.cards = []
   save_game_state
   redirect to('/bet')
