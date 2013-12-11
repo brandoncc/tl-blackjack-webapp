@@ -3,7 +3,7 @@ class Card
 
   def initialize(v, s)
     @value = v
-    @suit = s
+    @suit  = s
   end
 
   def image
