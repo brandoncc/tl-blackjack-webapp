@@ -4,4 +4,8 @@ class Player
   def initialize
     @cards = []
   end
+
+  def card_count
+    cards.count
+  end
 end
