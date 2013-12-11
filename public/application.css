@@ -1,7 +1,5 @@
 .playing-card {
     border: 1px solid black;
-}
-
-.playing-card + .playing-card {
-    margin-left: 1em;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
