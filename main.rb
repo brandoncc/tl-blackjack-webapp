@@ -22,6 +22,8 @@ set :sessions, true
 #   b. If dealer score > player score, lose bet ('/game')
 #   c. If player score == dealer score, bet stays on the table ('/game')
 # 9. Show game result ('/result'), with play again button
+# 10. If user plays again, set chips to nil and ask for new bet. If chips are not set to nil, that is a potential bug
+#     where the user could just point the browser back to /game and it would use the same bet value as the last hand.
 
 
 get '/' do
