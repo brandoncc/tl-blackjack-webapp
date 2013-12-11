@@ -17,4 +17,8 @@ class Blackjack
       @dealer.cards << @deck.deal_one_card
     end
   end
+
+  def play_hand
+    deal_cards
+  end
 end
