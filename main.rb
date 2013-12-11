@@ -32,9 +32,22 @@ end
 post '/' do
   if params.has_key?('name') && params[:name].strip.length > 0
     session[:player_name] = params[:name].strip
+    session[:chips] = 250
     redirect to('/bet')
   else
     redirect to('/')
+  end
+end
+
+get '/bet' do
+  redirect to('/') if session[:player_name].nil?
+  erb :bet
+end
+
+post '/bet' do
+  if params.has_key?('bet') && params[:bet].to_i > 0
+    session[:player_bet] = params[:bet]
+    redirect to('/play')
   end
 end
 

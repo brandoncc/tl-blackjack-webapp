@@ -1,0 +1,7 @@
+<form action="/bet" method="post">
+  <h4><%= session[:player_name] %>, how much would you like to bet on this hand?</h4>
+  <p><em>You current have $<%= session[:chips] %> available to bet.</em></p>
+  <p>&nbsp;</p>
+  <input type="text" name="bet" class="span2"><br />
+  <button type="submit" class="btn span2" style="margin-left: 0px !important;">Save Bet</button>
+</form>
