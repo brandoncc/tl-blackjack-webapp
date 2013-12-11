@@ -1,6 +1,10 @@
 <div id="dealer-cards" class="well span12"></div>
 <div id="dealer-status"></div>
-<div id="player-cards" class="well span12"></div>
+<div id="player-cards" class="well span12">
+  <% @player.cards.each do |card| %>
+  <img src="<%= "#{card.image}" %>" class="playing-card" />
+  <% end %>
+</div>
 <div id="player-status"></div>
 <div id="player-actions">
   <div class="btn-group span2">
