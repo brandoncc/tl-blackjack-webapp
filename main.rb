@@ -53,4 +53,8 @@ post '/bet' do
   end
 end
 
-
+get '/game' do
+  redirect to('/') if session[:player_name].nil? || session[:player_name].strip.length.zero?
+  redirect to('/bet') if session[:chips].to_i.nil? || session[:chips].to_i.zero?
+  erb :game
+end
