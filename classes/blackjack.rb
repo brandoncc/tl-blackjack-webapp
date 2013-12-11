@@ -21,4 +21,8 @@ class Blackjack
   def play_hand
     deal_cards
   end
+
+  def resume_hand
+    puts 'hand resumed'
+  end
 end
