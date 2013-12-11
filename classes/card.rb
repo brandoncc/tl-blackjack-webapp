@@ -7,6 +7,6 @@ class Card
   end
 
   def image
-    "/images/#{suit.downcase}_#{value.downcase}.jpg"
+    "/images/cards/#{suit.downcase}_#{value.downcase}.jpg"
   end
 end
