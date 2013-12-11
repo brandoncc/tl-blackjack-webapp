@@ -46,7 +46,7 @@ end
 
 post '/bet' do
   if params.has_key?('bet') && params[:bet].to_i > 0
-    session[:player_bet] = params[:bet]
+    session[:player_bet] = params[:bet].to_i
     redirect to('/game')
   end
 end
