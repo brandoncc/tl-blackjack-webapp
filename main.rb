@@ -62,8 +62,11 @@ end
 def ongoing_game_exists
   exists = false
   if !(@game.nil? || @player.nil?)
-    exists = !@player.name.nil? || @player.name.strip.length.nonzero?
+    exists = !@player.name.nil? || @player.name.strip.length > 0
   end
+
+  exists
+end
 
 def ongoing_hand_exists
   exists = false
