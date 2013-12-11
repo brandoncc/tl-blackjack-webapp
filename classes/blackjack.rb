@@ -8,5 +8,13 @@ class Blackjack
     @dealer = Dealer.new
     @deck   = Deck.new
     player.chips = INITIAL_CHIPS_VALUE
+    deal_cards
+  end
+
+  def deal_cards
+    2.times do
+      @player.cards << @deck.deal_one_card
+      @dealer.cards << @deck.deal_one_card
+    end
   end
 end
