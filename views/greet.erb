@@ -1,4 +1,11 @@
-<form method="post">
+<% if already_playing_game %>
+    <div class="alert alert-error clearfix">
+      <p class="span12">Warning, <strong><%= "#{@player.name}" %></strong> is already playing a game.</p>
+      <p><a href="/game" class="btn btn-info span3">Click here to resume</a></p>
+    </div>
+<% end %>
+<p>&nbsp;</p>
+<form  method="post">
   <h4>Hello, what is your name?</h4>
   <p>&nbsp;</p>
   <input type="text" name="name" class="span3"><br />

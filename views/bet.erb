@@ -1,7 +1,25 @@
-<form method="post">
-  <h4><%= session[:player_name] %>, how much would you like to bet on this hand?</h4>
-  <p><em>You current have $<%= session[:chips] %> available to bet.</em></p>
-  <p>&nbsp;</p>
-  <input type="text" name="bet" class="span2"><br />
-  <button type="submit" class="btn span2" style="margin-left: 0px !important;">Save Bet</button>
-</form>
+<% if already_playing_hand %>
+    <h4>I'm sorry, you are already playing a hand.</h4><br/>
+    <p>
+      <a href="/game" class="btn span3 btn-success clearfix" style="margin-left: 0px !important;">
+        Click here to continue hand
+      </a>
+    </p>
+    <p>&nbsp;</p>
+    <p>
+      <a href="/reset_game" class="btn span3 btn-danger clearfix" style="margin-left: 0px !important;">
+        Click here to reset the current game
+      </a>
+    </p>
+<% else %>
+    <form method="post">
+
+      <h4><%= @player.name %>, how much would you like to bet on this hand?</h4>
+
+      <p><em>You current have $<%= @player.chips %> available to bet.</em></p>
+
+      <p>&nbsp;</p>
+      <input type="text" name="bet" class="span2"><br/>
+      <button type="submit" class="btn span2" style="margin-left: 0px !important;">Save Bet</button>
+    </form>
+<% end %>
