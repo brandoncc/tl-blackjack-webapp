@@ -25,6 +25,7 @@ class Blackjack
     @dealer      = Dealer.new
     @deck        = Deck.new
     player.chips = INITIAL_CHIPS_VALUE
+    @winnings_processed     = false
   end
 
   def deal_cards
