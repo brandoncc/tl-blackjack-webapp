@@ -120,7 +120,13 @@ get '/game' do
   redirect to('/') if @player.nil? || @player.name.nil? || @player.name.strip.length.zero?
   redirect to('/bet') if @player.bet.nil? || @player.bet.to_i.zero?
   ongoing_hand_exists ? @game.resume_hand : @game.play_hand
-  erb :game
+  game_result = @game.game_status
+  game_result == Blackjack::NO_WINNER_YET ? erb :game : redirect to('/result')
+end
+
+get '/result' do
+  game_result = @game.game_status
+  erb :result
 end
 
 get '/reset_game' do
