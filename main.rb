@@ -135,6 +135,22 @@ get '/result' do
   erb :result
 end
 
+get '/new_round' do
+  push = @game.game_status == Blackjack::GAME_IS_PUSH
+  prev_bet = @player.bet
+  @game.new_round
+
+  if push
+    @player.bet = prev_bet
+    redir_path = '/game'
+  else
+    redir_path = '/bet'
+  end
+
+  save_game_state
+  redirect to(redir_path)
+end
+
 get '/reset_game' do
   @player.chips = 250
   @player.bet = 0
