@@ -1,10 +1,10 @@
-<div class="alert<%= " alert-info" unless @player.finished %>" style="margin-bottom: 0px;">
+<div class="alert<%= " alert-info" unless @player.finished %>" style="margin-bottom: 0px; padding: 8px 14px">
   <% if @player.finished %>
-      <%= @player.name %> stayed at:<br/>
+      <%= @player.name %> stayed at:
   <% else %>
-      <%= @player.name %>'s current score is:<br/>
+      <%= @player.name %>'s current score is:
   <% end %>
-  <strong><%= "#{@player.hand_is_soft_or_hard.nil? ?
+  <strong style="display: inline-block;"><%= "#{@player.hand_is_soft_or_hard.nil? ?
           '' :
           "#{@player.hand_is_soft_or_hard} " } #{@player.hand_value}" %></strong>
 </div>
