@@ -1,4 +1,4 @@
-<% message = case @game.game_status
+<% message = case @game.last_hand_result
              when Blackjack::PLAYER_HAS_BLACKJACK
                "Congratulations, #{@player.name} got blackjack!"
              when Blackjack::PLAYER_WINS
