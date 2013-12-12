@@ -1,3 +1,7 @@
-<div class="alert alert-info span<%= "#{CARD_WELL_SPAN_WIDTH}" %>">
+<div class="alert alert-info span<%= "#{CARD_WELL_SPAN_WIDTH}" %> pull-right" style="padding: 8px 25px 8px 14px;">
+  Dealer's current score is:
+  <strong><%= "#{@dealer.hand_is_soft_or_hard.nil? ?
+          '' :
+          "#{@dealer.hand_is_soft_or_hard} " } #{@dealer.hand_value}" %></strong>
 
 </div>
