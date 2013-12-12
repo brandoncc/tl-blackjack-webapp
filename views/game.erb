@@ -1,24 +1,11 @@
-<div id="dealer-cards" class="well span12">
-  <% if @player.finished %>
-      <% @dealer.cards.each do |card| %>
-          <img src="<%= "#{card.image}" %>" class="playing-card span2"/>
-      <% end %>
-  <% else %>
-      <img src="<%= "#{@dealer.cards.first.image}" %>" class="playing-card span2"/>
-      <img src="<%= "/images/cards/cover.jpg" %>" class="playing-card span2"/>
-  <% end %>
+<% PLAYER_CARD_WIDTH_DURING_PLAY = 2 %>
+<% PLAYER_CARD_WIDTH_AFTER_PLAY = 1 %>
+<% CARD_WELL_SPAN_WIDTH = 8 # MUST BE ODD!!!    %>
+
+<div class="row span12">
+  <%= erb :'_actions' %>
+  <%= erb :'_dealer_cards' %>
 </div>
-<div id="dealer-status">
-</div>
-<div id="player-cards" class="well span12">
-  <% @player.cards.each do |card| %>
-      <img src="<%= "#{card.image}" %>" class="playing-card span2"/>
-  <% end %>
-</div>
-<div id="player-status"></div>
-<div id="player-actions">
-  <div class="btn-group span2">
-    <button class="btn btn-success">Hit</button>
-    <button class="btn btn-danger">Stay</button>
-  </div>
+<div class="row span12">
+    <%= erb :'_player_cards' %>
 </div>

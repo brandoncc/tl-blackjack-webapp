@@ -1,0 +1,17 @@
+<div id="player-cards" class="well span<%= "#{CARD_WELL_SPAN_WIDTH}" %> pull-right">
+  <h5><%= "#{@player.name}" %>'s Cards</h5>
+  <hr />
+  <div class="row">
+    <% @player.cards.each_with_index do |card, index| %>
+        <% if index % (CARD_WELL_SPAN_WIDTH / (@player.finished ? PLAYER_CARD_WIDTH_AFTER_PLAY :
+                PLAYER_CARD_WIDTH_DURING_PLAY)) == 0 %>
+            <% if index > 0 %>
+                <%= '</div><div class="row">' %>
+            <% end %>
+        <% end %>
+        <div class="span<%= @player.finished ? "#{PLAYER_CARD_WIDTH_AFTER_PLAY}" : "#{PLAYER_CARD_WIDTH_DURING_PLAY}" %>">
+          <img src="<%= "#{card.image}" %>" class="playing-card" />
+        </div>
+    <% end %>
+  </div>
+</div>
