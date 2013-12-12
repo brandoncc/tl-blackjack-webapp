@@ -64,6 +64,12 @@ module Dealable
     end
   end
 
+  def discard_cards(d)
+    while card_count > 0
+      d.discard_pile << @cards.pop
+    end
+  end
+
   def card_count
     cards.count
   end
