@@ -1,5 +1,5 @@
 class Blackjack
-  attr_accessor :player, :dealer, :deck, :last_hand_player_score, :last_hand_dealer_score, :last_hand_result
+  attr_accessor :player, :dealer, :deck, :winnings_processed
 
   INITIAL_CHIPS_VALUE     = 250
   DEALER_STAY_MINIMUM     = 17
@@ -25,9 +25,6 @@ class Blackjack
     @dealer      = Dealer.new
     @deck        = Deck.new
     player.chips = INITIAL_CHIPS_VALUE
-    @last_hand_player_score = 0
-    @last_hand_dealer_score = 0
-    @last_hand_result       = NO_WINNER_YET
   end
 
   def deal_cards
