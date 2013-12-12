@@ -36,13 +36,12 @@ class Blackjack
   end
 
   def game_status
-    ret = NO_WINNER_YET
-    ret = PLAYER_HAS_BLACKJACK if @player.hand_is_blackjack?
-    ret = PLAYER_HAS_21 if @player.hand_is_blackjack? && @player.card_count > 2
-    ret = PLAYER_BUSTED if @player.hand_is_bust?
-    ret = DEALER_HAS_BLACKJACK if @dealer.hand_is_blackjack?
-    ret = DEALER_HAS_21 if @dealer.hand_is_blackjack? && @dealer.card_count > 2
-    ret = DEALER_BUSTED if @dealer.hand_is_bust?
-    ret
+    return PLAYER_HAS_BLACKJACK if @player.hand_is_blackjack?
+    return PLAYER_HAS_21 if @player.hand_is_blackjack? && @player.card_count > 2
+    return PLAYER_BUSTED if @player.hand_is_bust?
+    return DEALER_HAS_BLACKJACK if @dealer.hand_is_blackjack?
+    return DEALER_HAS_21 if @dealer.hand_is_blackjack? && @dealer.card_count > 2
+    return DEALER_BUSTED if @dealer.hand_is_bust?
+    return NO_WINNER_YET
   end
 end
