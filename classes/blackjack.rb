@@ -54,6 +54,10 @@ class Blackjack
   end
 
 
+  def take_player_loss
+    @player.chips -= @player.bet
+  end
+
   def new_round
     @player.bet         = 0
     @winnings_processed = false
