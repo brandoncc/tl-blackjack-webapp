@@ -53,6 +53,10 @@ class Blackjack
     return NO_WINNER_YET
   end
 
+  def player_wins?
+    @player.hand_value > @dealer.hand_value
+  end
+
 
   def process_winnings
     case game_status
