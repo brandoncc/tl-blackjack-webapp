@@ -33,6 +33,11 @@
                   "#{@player.name}'s final hand value: #{@player.hand_value}." + '<br />' +
                   "Dealer's final hand value: #{@dealer.hand_value}." %>
       <p>&nbsp;</p>
-      <p>Please choose an option from the list on the left.</p>
+      <% if @player.chips < 1 %>
+          <p>Unfortunately, you are out of chips. Game over.</p>
+      <% else %>
+          <p>Please choose an option from the list on the left.</p>
+      <% end %>
+
     </div>
 <% end %>

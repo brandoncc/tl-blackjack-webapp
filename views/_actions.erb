@@ -1,8 +1,12 @@
 <% if @game.winnings_processed == true %>
     <ul class="nav nav-list span3 alert-success well affix" style="padding: 8px 14px;">
       <li class="nav-header">GAME ACTIONS</li>
-      <li><a href="/reset_game"><i class="icon-play"></i> Play again</a></li>
-      <li><a href="/new_round"><i class="icon-off"></i> Exit game</a></li>
+      <% if @player.chips > 0 %>
+          <li><a href="/new_round"><i class="icon-play"></i> Play another round</a></li>
+          <li><a href="/reset_game"><i class="icon-off"></i> Restart game</a></li>
+      <% else %>
+          <li><a href="/reset_game"><i class="icon-play"></i> Play a new game</a></li>
+      <% end %>
     </ul>
 <% else %>
     <% if @player.finished %>
