@@ -67,6 +67,14 @@ class Blackjack
     # TODO: Award winnings
   end
 
+  def award_player_win
+    if game_status == PLAYER_HAS_BLACKJACK
+      @player.chips += (@player.bet * BLACKJACK_PAYOUT).ceil
+    else
+      @player.chips += (@player.bet * WIN_PAYOUT).ceil
+    end
+  end
+
   def take_player_loss
     @player.chips -= @player.bet
   end
