@@ -129,6 +129,8 @@ get '/game' do
 end
 
 get '/result' do
+  redirect to('/game') unless @dealer.in_stay_range? && @player.finished &&
+      !(@dealer.hand_is_blackjack? || @dealer.hand_is_bust?)
   game_result = @game.game_status
   erb :result
 end
