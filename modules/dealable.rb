@@ -12,7 +12,7 @@ module Dealable
   end
 
   def hand_is_bust?
-    @value > 21
+    hand_value > 21
   end
 
   def hand_value
