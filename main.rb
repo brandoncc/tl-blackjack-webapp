@@ -130,3 +130,19 @@ get '/reset_game' do
   save_game_state
   redirect to('/bet')
 end
+
+get '/actions/hit/:who' do
+  case params[:who]
+  when 'player' then @player.give_card(@deck.deal_one_card)
+  when 'dealer' then @dealer.give_card(@deck.deal_one_card)
+  end
+  redirect to('/game')
+end
+
+get '/actions/stay/:who' do
+  case params[:who]
+  when 'player' then @player.finished = true
+  when 'dealer' then @dealer.finished = true
+  end
+  redirect to('/game')
+end
