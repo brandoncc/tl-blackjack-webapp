@@ -1,9 +1,6 @@
 class Blackjack
   attr_accessor :player, :dealer, :deck, :winnings_processed
 
-  INITIAL_CHIPS_VALUE     = 250
-  DEALER_STAY_MINIMUM     = 17
-  BLACKJACK_VALUE         = 21
   INITIAL_CHIPS_VALUE  = 250
   DEALER_STAY_MINIMUM  = 17
   BLACKJACK_VALUE      = 21
@@ -11,20 +8,20 @@ class Blackjack
   WIN_PAYOUT           = 1.0
 
   # win codes
-  PLAYER_HAS_BLACKJACK    = 1001
-  PLAYER_BUSTED           = 1002
-  PLAYER_WINS             = 1003
-  DEALER_HAS_BLACKJACK    = 2001
-  DEALER_BUSTED           = 2003
-  DEALER_WINS             = 2005
-  NO_WINNER_YET           = 3001
-  GAME_IS_PUSH            = 3002
+  PLAYER_HAS_BLACKJACK = 1001
+  PLAYER_BUSTED        = 1002
+  PLAYER_WINS          = 1003
+  DEALER_HAS_BLACKJACK = 2001
+  DEALER_BUSTED        = 2003
+  DEALER_WINS          = 2005
+  NO_WINNER_YET        = 3001
+  GAME_IS_PUSH         = 3002
 
   def initialize
-    @player      = Player.new
-    @dealer      = Dealer.new
-    @deck        = Deck.new
-    player.chips = INITIAL_CHIPS_VALUE
+    @player                 = Player.new
+    @dealer                 = Dealer.new
+    @deck                   = Deck.new
+    player.chips            = INITIAL_CHIPS_VALUE
     @winnings_processed     = false
   end
 
