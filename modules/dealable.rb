@@ -8,7 +8,7 @@ module Dealable
   end
 
   def hand_is_blackjack?
-    @cards.count == 2 && value == 21
+    @cards.count == 2 && hand_value == 21
   end
 
   def hand_is_bust?
