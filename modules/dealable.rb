@@ -63,4 +63,8 @@ module Dealable
       score[:soft_or_hard] = 'soft' if set_soft_or_hard
     end
   end
+
+  def card_count
+    cards.count
+  end
 end
