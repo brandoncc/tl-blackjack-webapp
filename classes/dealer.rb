@@ -8,4 +8,8 @@ class Dealer
   def initialize
     @cards = []
   end
+
+  def in_stay_range?
+    hand_value >= Blackjack::DEALER_STAY_MINIMUM && hand_value <= Blackjack::BLACKJACK_VALUE
+  end
 end
