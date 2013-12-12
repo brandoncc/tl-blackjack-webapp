@@ -53,6 +53,15 @@ class Blackjack
     return NO_WINNER_YET
   end
 
+
+  def new_round
+    @player.bet         = 0
+    @winnings_processed = false
+    @player.finished    = false
+    @player.discard_cards(@deck)
+    @dealer.discard_cards(@deck)
+  end
+
   def reset_game
     new_round
     @player.chips = 250
