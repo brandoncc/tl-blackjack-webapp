@@ -2,6 +2,9 @@ class Blackjack
   attr_accessor :player, :dealer, :deck
 
   INITIAL_CHIPS_VALUE  = 250
+  INITIAL_CHIPS_VALUE     = 250
+  DEALER_STAY_MINIMUM     = 17
+  BLACKJACK_VALUE         = 21
 
   # win codes
   PLAYER_HAS_BLACKJACK = 1001

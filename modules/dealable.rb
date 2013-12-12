@@ -8,11 +8,11 @@ module Dealable
   end
 
   def hand_is_blackjack?
-    @cards.count == 2 && hand_value == 21
+    @cards.count == 2 && hand_value == Blackjack::BLACKJACK_VALUE
   end
 
   def hand_is_bust?
-    hand_value > 21
+    hand_value > Blackjack::BLACKJACK_VALUE
   end
 
   def hand_value
@@ -50,12 +50,12 @@ module Dealable
 
       i += 1
     end
-    current_score[:soft_or_hard] = nil if current_score[:value] > 21
+    current_score[:soft_or_hard] = nil if current_score[:value] > Blackjack::BLACKJACK_VALUE
     current_score
   end
 
   def add_ace_to_score(score, set_soft_or_hard)
-    if (score[:value] + 11) > 21
+    if (score[:value] + 11) > Blackjack::BLACKJACK_VALUE
       score[:value] += 1
       score[:soft_or_hard] = 'hard' if set_soft_or_hard
     else
