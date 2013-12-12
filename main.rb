@@ -17,7 +17,7 @@ set :sessions, true
 # 6. Player turn ('/game')
 #   a. Ask for user action until blackjack/bust/21/stay ('/game')
 #   b. If blackjack/bust, end game, awarding/taking winnings/losses ('/game')
-#   c. Notify player of game result ('/result')
+#   c. Notify player of game result ('/result') ==> decided to display results inline on '/game'
 # 7. Dealer turn ('/game')
 #   a. Check for blackjack ('/game')
 #   b. If blackjack, end game and take lost credits from player ('/game')
@@ -26,7 +26,7 @@ set :sessions, true
 #   a. If player score > dealer score, award winnings ('/game')
 #   b. If dealer score > player score, lose bet ('/game')
 #   c. If player score == dealer score, bet stays on the table ('/game')
-# 9. Show game result ('/result'), with play again button
+# 9. Show game result ('/result'), with play again button ==> decided to display results inline on '/game'
 # 10. If user plays again, set chips to nil and ask for new bet. If chips are not set to nil, that is a potential bug
 #     where the user could just point the browser back to /game and it would use the same bet value as the last hand.
 
@@ -126,13 +126,6 @@ get '/game' do
     save_game_state
   end
   erb :game
-end
-
-get '/result' do
-  redirect to('/game') unless @dealer.in_stay_range? && @player.finished &&
-      !(@dealer.hand_is_blackjack? || @dealer.hand_is_bust?)
-  game_result = @game.game_status
-  erb :result
 end
 
 get '/new_round' do
