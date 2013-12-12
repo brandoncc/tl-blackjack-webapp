@@ -1,5 +1,5 @@
-<div class="alert alert-info span<%= "#{CARD_WELL_SPAN_WIDTH}" %> pull-right" style="padding: 8px 25px 8px 14px;">
-  <%= @player.name %>'s current score is:
+<div class="alert alert-info" style="margin-bottom: 0px;">
+  <%= @player.name %>'s current score is:<br />
   <strong><%= "#{@player.hand_is_soft_or_hard.nil? ?
           '' :
           "#{@player.hand_is_soft_or_hard} " } #{@player.hand_value}" %></strong>
