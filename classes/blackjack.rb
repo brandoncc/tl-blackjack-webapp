@@ -1,16 +1,16 @@
 class Blackjack
   attr_accessor :player, :dealer, :deck
 
-  INITIAL_CHIPS_VALUE = 250
+  INITIAL_CHIPS_VALUE  = 250
 
   # win codes
   PLAYER_HAS_BLACKJACK = 1001
-  PLAYER_HAS_21 = 1001
-  PLAYER_BUSTED = 1002
+  PLAYER_HAS_21        = 1001
+  PLAYER_BUSTED        = 1002
   DEALER_HAS_BLACKJACK = 2001
-  DEALER_HAS_21 = 2002
-  DEALER_BUSTED = 2003
-  NO_WINNER_YET = 3001
+  DEALER_HAS_21        = 2002
+  DEALER_BUSTED        = 2003
+  NO_WINNER_YET        = 3001
 
 
   def initialize
