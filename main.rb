@@ -152,9 +152,7 @@ get '/new_round' do
 end
 
 get '/reset_game' do
-  @player.chips = 250
-  @player.bet = 0
-  @player.cards = []
+  @game.reset_game
   save_game_state
   redirect to('/bet')
 end
