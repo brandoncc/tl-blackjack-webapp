@@ -52,4 +52,9 @@ class Blackjack
     return DEALER_WINS if @dealer.won?
     return NO_WINNER_YET
   end
+
+  def reset_game
+    new_round
+    @player.chips = 250
+  end
 end
