@@ -57,6 +57,9 @@ class Blackjack
     @player.hand_value > @dealer.hand_value
   end
 
+  def dealer_wins?
+    @player.hand_value < @dealer.hand_value
+  end
 
   def process_winnings
     case game_status
