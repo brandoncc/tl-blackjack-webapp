@@ -70,8 +70,7 @@ class Blackjack
     when PLAYER_WINS then award_player_win
     when DEALER_WINS then take_player_loss
     end
-    @winnings_processed     = true
-    # TODO: Award winnings
+    @winnings_processed = true
   end
 
   def award_player_win
