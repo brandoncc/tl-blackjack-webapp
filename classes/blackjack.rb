@@ -74,12 +74,15 @@ class Blackjack
       award_player_win
     when DEALER_WINS
       take_player_loss
+    when GAME_IS_PUSH
+      @player.add_push
     end
     @winnings_processed = true
   end
 
   def award_player_win
-      @player.chips += player_winnings_amount
+    @player.chips += player_winnings_amount
+    @player.add_win
   end
 
   def player_winnings_amount
@@ -92,6 +95,7 @@ class Blackjack
 
   def take_player_loss
     @player.chips -= @player.bet
+    @player.add_loss
   end
 
   def round_over?
