@@ -5,3 +5,5 @@ gem 'sinatra'
 gem 'thin'
 gem 'pry'
 gem 'sinatra-flash'
+gem 'newrelic_rpm'
+
