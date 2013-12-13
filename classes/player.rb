@@ -15,6 +15,7 @@ class Player
   end
 
   def reset_stats
+    @stats          = {}
     @stats[:wins]   = 0
     @stats[:losses] = 0
     @stats[:pushes] = 0
