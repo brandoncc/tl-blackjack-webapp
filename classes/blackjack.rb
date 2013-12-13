@@ -114,5 +114,6 @@ class Blackjack
   def reset_game
     new_round
     @player.chips = 250
+    @player.reset_stats
   end
 end
