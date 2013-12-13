@@ -32,4 +32,16 @@ class Player
   def add_push
     @stats[:pushes] += 1
   end
+
+  def wins_num
+    @stats[:wins]
+  end
+
+  def losses_num
+    @stats[:losses]
+  end
+
+  def pushes_num
+    @stats[:pushes]
+  end
 end
