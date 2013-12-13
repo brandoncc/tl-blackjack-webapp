@@ -11,7 +11,7 @@ configure :production do
   require 'newrelic_rpm'
 end
 
-set :sessions, true
+use Rack::Session::Pool
 
 # Plan of action:
 # 1. Ask player name ('/')
