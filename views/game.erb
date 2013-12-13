@@ -4,7 +4,10 @@
 
 <div class="span12">
   <div class="row">
-    <%= erb :'_actions' %>
+    <div class="span3 affix">
+      <p><%= erb :'_actions' %></p>
+      <p><%= erb :'_player_stats' %></p>
+    </div>
     <%= erb :'_game_result' %>
     <%= erb :'_dealer_cards' %>
   </div>

@@ -1,0 +1,12 @@
+<ul class="nav nav-list">
+  <li class="divider"></li>
+  <li class="nav-header">PLAYER STATS</li>
+  <% if !@game.round_over? || @game.game_status == Blackjack::GAME_IS_PUSH %>
+      <li class="disabled">Current bet: <strong>$<%= "#{@player.bet}" %></strong></li>
+      <li class="disabled">Chips remaining: <strong>$<%= "#{@player.chips - @player.bet}" %></strong></li>
+      <li class="disabled">&nbsp;</li>
+  <% end %>
+  <li class="disabled">Wins: <strong><%= "#{@player.wins_num}" %></strong></li>
+  <li class="disabled">Losses: <strong><%= "#{@player.losses_num}" %></strong></li>
+  <li class="disabled">Pushes: <strong><%= "#{@player.pushes_num}" %></strong></li>
+</ul>
