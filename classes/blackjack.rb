@@ -86,6 +86,11 @@ class Blackjack
     @player.chips -= @player.bet
   end
 
+  def round_over?
+    (@player.hand_is_bust? || @player.hand_is_blackjack?) ||
+        (@player.finished && @dealer.hand_value >= DEALER_STAY_MINIMUM)
+  end
+
   def new_round
     @player.bet         = 0
     @winnings_processed = false

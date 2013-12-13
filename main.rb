@@ -120,8 +120,8 @@ get '/game' do
   redirect to('/') if @player.nil? || @player.name.nil? || @player.name.strip.length.zero?
   redirect to('/bet') if @player.bet.nil? || @player.bet.to_i.zero?
   ongoing_hand_exists ? @game.resume_hand : @game.play_hand
-  game_result = @game.game_status
-  unless game_result == Blackjack::NO_WINNER_YET || @game.winnings_processed then
+
+  if @game.round_over? && !@game.winnings_processed then
     @game.process_winnings
     save_game_state
   end

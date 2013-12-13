@@ -1,4 +1,4 @@
-<% if @player.finished && @dealer.hand_value >= Blackjack::DEALER_STAY_MINIMUM %>
+<% if @game.round_over? %>
     <% case @game.game_status
        when Blackjack::PLAYER_HAS_BLACKJACK
          alert_class = 'win'
