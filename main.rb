@@ -155,6 +155,7 @@ get '/actions/hit/:who' do
   when 'player' then @player.give_card(@deck.deal_one_card)
   when 'dealer' then @dealer.give_card(@deck.deal_one_card)
   end
+  save_game_state
   redirect to('/game')
 end
 
@@ -163,5 +164,6 @@ get '/actions/stay/:who' do
   when 'player' then @player.finished = true
   when 'dealer' then @dealer.finished = true
   end
+  save_game_state
   redirect to('/game')
 end
