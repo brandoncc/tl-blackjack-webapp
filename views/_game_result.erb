@@ -23,21 +23,40 @@
          message     = 'I am not sure why you are seeing this, there is no winner yet.'
        when Blackjack::GAME_IS_PUSH
          alert_class = 'win'
-         message     = "Looks like this round was a push. #{@player.name}'s bet of $#{@player.bet} will stay " +
-                 "on the table."
+         message     = 'Looks like this round was a push.'
        end %>
 
     <% alert_class = (alert_class == 'win' ? 'success' : 'danger') %>
     <div class="alert alert-<%= "#{alert_class}" %> span<%= "#{CARD_WELL_SPAN_WIDTH}" %> pull-right" style="padding: 8px 23px 8px 14px;">
-      <%= "#{message}" + '<br /><br />' +
-                  "#{@player.name}'s final hand value: #{@player.hand_value}." + '<br />' +
-                  "Dealer's final hand value: #{@dealer.hand_value}." %>
+      <%= "#{message}" %>
+      <%= if @game.game_status == Blackjack::PLAYER_HAS_BLACKJACK
+            '<br /><br />' +
+                    "#{@player.name}'s final hand value: #{@player.hand_value}." + '<br />' +
+                    "Dealer's final hand value: #{@dealer.card_showing}."
+          else
+            '<br /><br />' +
+                    "#{@player.name}'s final hand value: #{@player.hand_value}." + '<br />' +
+                    "Dealer's final hand value: #{@dealer.hand_value}."
+          end
+      %>
       <p>&nbsp;</p>
       <% if @player.chips < 1 %>
           <p>Unfortunately, you are out of chips. Game over.</p>
       <% else %>
-          <p>Please choose an option from the list on the left.</p>
+          <% if @game.player_wins? %>
+              <p>
+                You have been awarded <strong>$<%= "#{@game.player_winnings_amount}" %></strong>.
+                You now have <strong>$<%= "#{@player.chips}" %></strong>.
+              </p>
+          <% elsif @game.game_status == Blackjack::GAME_IS_PUSH %>
+              <%= "#{@player.name}'s bet of $#{@player.bet} will stay " +
+                  "on the table."  %>
+          <% else %>
+              <p>
+                You have lost <strong>$<%= "#{@player.bet}" %></strong>.
+                You now have <strong>$<%= "#{@player.chips}" %></strong>.
+              </p>
+          <% end %>
       <% end %>
-
     </div>
 <% end %>
