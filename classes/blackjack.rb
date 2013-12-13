@@ -62,12 +62,18 @@ class Blackjack
 
   def process_winnings
     case game_status
-    when PLAYER_HAS_BLACKJACK then award_player_win
-    when PLAYER_BUSTED then take_player_loss
-    when DEALER_HAS_BLACKJACK then take_player_loss
-    when DEALER_BUSTED then award_player_win
-    when PLAYER_WINS then award_player_win
-    when DEALER_WINS then take_player_loss
+    when PLAYER_HAS_BLACKJACK
+      award_player_win
+    when PLAYER_BUSTED
+      take_player_loss
+    when DEALER_HAS_BLACKJACK
+      take_player_loss
+    when DEALER_BUSTED
+      award_player_win
+    when PLAYER_WINS
+      award_player_win
+    when DEALER_WINS
+      take_player_loss
     end
     @winnings_processed = true
   end
