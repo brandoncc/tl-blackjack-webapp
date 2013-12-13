@@ -7,6 +7,10 @@ require_relative 'classes/dealer'
 require_relative 'classes/deck'
 require_relative 'classes/blackjack'
 
+configure :production do
+  require 'newrelic_rpm'
+end
+
 set :sessions, true
 
 # Plan of action:
