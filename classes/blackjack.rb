@@ -41,12 +41,14 @@ class Blackjack
   end
 
   def game_status
-    return NO_WINNER_YET unless @player.finished && @dealer.hand_value > DEALER_STAY_MINIMUM
-
     return PLAYER_HAS_BLACKJACK if @player.hand_is_blackjack?
     return PLAYER_BUSTED if @player.hand_is_bust?
     return DEALER_HAS_BLACKJACK if @dealer.hand_is_blackjack?
     return DEALER_BUSTED if @dealer.hand_is_bust?
+
+    return NO_WINNER_YET unless (@player.finished || @player.hand_is_bust? || @player.hand_is_blackjack?) &&
+        @dealer.hand_value >= DEALER_STAY_MINIMUM
+
     return GAME_IS_PUSH if @player.hand_value == @dealer.hand_value
     return PLAYER_WINS if player_wins?
     return DEALER_WINS if !player_wins?
