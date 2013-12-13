@@ -75,10 +75,14 @@ class Blackjack
   end
 
   def award_player_win
+      @player.chips += player_winnings_amount
+  end
+
+  def player_winnings_amount
     if game_status == PLAYER_HAS_BLACKJACK
-      @player.chips += (@player.bet * BLACKJACK_PAYOUT).ceil
+      (@player.bet * BLACKJACK_PAYOUT).ceil
     else
-      @player.chips += (@player.bet * WIN_PAYOUT).ceil
+      (@player.bet * WIN_PAYOUT).ceil
     end
   end
 
