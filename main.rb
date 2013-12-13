@@ -107,7 +107,8 @@ get '/bet' do
 end
 
 post '/bet' do
-  if params.has_key?('bet') && params[:bet].to_i > 0
+  if params.has_key?('bet') && params[:bet].to_s =~ /\A[-+]?\d*\.?\d+\z/ && params[:bet].to_i > 0 &&
+      params[:bet].to_i <= @player.chips
     @player.bet = params[:bet].to_i
 
     save_game_state
