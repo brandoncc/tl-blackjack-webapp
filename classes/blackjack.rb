@@ -18,11 +18,11 @@ class Blackjack
   GAME_IS_PUSH         = 3002
 
   def initialize
-    @player                 = Player.new
-    @dealer                 = Dealer.new
-    @deck                   = Deck.new
-    player.chips            = INITIAL_CHIPS_VALUE
-    @winnings_processed     = false
+    @player             = Player.new
+    @dealer             = Dealer.new
+    @deck               = Deck.new
+    player.chips        = INITIAL_CHIPS_VALUE
+    @winnings_processed = false
   end
 
   def deal_cards
