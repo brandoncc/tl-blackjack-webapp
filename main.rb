@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'sinatra'
+require 'sinatra/flash'
 require 'pry'
 require_relative 'classes/player'
 require_relative 'classes/dealer'
