@@ -26,4 +26,8 @@ class Card
       @value.to_i
     end
   end
+
+  def to_s
+    "#{face_value} of #{@suit}"
+  end
 end
