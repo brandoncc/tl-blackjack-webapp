@@ -1,7 +1,12 @@
 <div class="alert alert-info" style="margin-bottom: 0px; padding: 8px 14px">
   Dealer's current score is:
-  <strong style="display: inline-block;"><%= "#{@dealer.hand_is_soft_or_hard.nil? ?
-          '' :
-          "#{@dealer.hand_is_soft_or_hard} " } #{@dealer.hand_value}" %></strong>
-
+  <strong style="display: inline-block;">
+    <% if @player.finished %>
+        <%= "#{@dealer.hand_is_soft_or_hard.nil? ?
+                '' :
+                "#{@dealer.hand_is_soft_or_hard} " } #{@dealer.hand_value}" %>
+    <% else %>
+        <%= "#{@dealer.card_showing}" %>
+    <% end %>
+  </strong>
 </div>
