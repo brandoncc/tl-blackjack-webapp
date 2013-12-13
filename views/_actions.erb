@@ -1,5 +1,5 @@
-<% if @game.winnings_processed == true %>
-    <ul class="nav nav-list span3 alert-success well affix" style="padding: 8px 14px;">
+<% if @game.round_over? %>
+    <ul class="nav nav-list span3 affix" style="padding: 8px 14px;">
       <li class="nav-header">GAME ACTIONS</li>
       <% if @player.chips > 0 %>
           <li><a href="/new_round"><i class="icon-play"></i> Play another round</a></li>
@@ -10,7 +10,7 @@
     </ul>
 <% else %>
     <% if @player.finished %>
-        <ul class="nav nav-list span3 well affix">
+        <ul class="nav nav-list span3 affix">
           <li class="nav-header">DEALER ACTIONS</li>
           <li><a href="/actions/hit/dealer"><i class="icon-thumbs-up"></i> Hit dealer's hand</a></li>
           <li class="divider"></li>
@@ -19,11 +19,13 @@
           <li><%= erb :'_player_status' %></li>
         </ul>
     <% else %>
-        <ul class="nav nav-list span3 well affix">
+        <ul class="nav nav-list span3 affix">
           <li class="nav-header">USER ACTIONS</li>
           <li><a href="/actions/hit/player"><i class="icon-thumbs-up"></i> Hit</a></li>
           <li><a href="/actions/stay/player"><i class="icon-thumbs-down"></i> Stay</a></li>
           <li class="divider"></li>
+          <li><%= erb :'_dealer_status' %></li>
+          <li>&nbsp;</li>
           <li><%= erb :'_player_status' %></li>
         </ul>
     <% end %>
