@@ -1,4 +1,3 @@
-#TODO: Maintain w/l/p stats
 require_relative '../modules/dealable'
 require_relative '../modules/bettable'
 
