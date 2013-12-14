@@ -127,7 +127,9 @@ post '/bet' do
     save_game_state
     redirect to('/game')
   else
-    if params[:bet].to_s =~ /\A[-+]?\d*\.?\d+\z/ && params[:bet].to_i > 0 && params[:bet].to_i > @player.chips
+    if !(params[:bet].to_s =~ /\A[-+]?\d*\.?\d+\z/)
+      flash(:bet)[:error] = "Sorry, <strong>#{params[:bet]}</strong> is not a valid number."
+    elsif params[:bet].to_s =~ /\A[-+]?\d*\.?\d+\z/ && params[:bet].to_i > 0 && params[:bet].to_i > @player.chips
       flash(:bet)[:error] =
           "Sorry, you cannot bet <strong>$#{params[:bet]}</strong>. " +
           "You currently have <strong>$#{@player.chips}</strong>."
