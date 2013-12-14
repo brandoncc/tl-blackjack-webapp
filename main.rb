@@ -11,7 +11,7 @@ configure :production do
   require 'newrelic_rpm'
 end
 
-use Rack::Session::Pool, :expire_after => 60 * 10
+use Rack::Session::Pool, :expire_after => 60 * 60 * 24
 
 # Plan of action:
 # 1. Ask player name ('/')
