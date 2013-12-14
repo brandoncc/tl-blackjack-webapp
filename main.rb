@@ -83,8 +83,20 @@ def ongoing_hand_exists
   return exists
 end
 
+def handle_expired_session
+  redirect to('/') if @player.nil? || @player.name.nil? || @player.name.strip.length.zero?
+end
+
 before do
   get_game_state
+end
+
+before /^(?!\/$)/ do
+  handle_expired_session
+end
+
+before '/game' do
+  redirect to('/bet') if @player.bet.nil? || @player.bet.to_i.zero? || !(@player.bet.to_s =~ /\A[-+]?\d*\.?\d+\z/)
 end
 
 get '/' do
@@ -106,7 +118,6 @@ post '/' do
 end
 
 get '/bet' do
-  redirect to('/') if @player.nil? || @player.name.nil?
   erb :bet, locals: { already_playing_hand: ongoing_hand_exists }
 end
 
@@ -128,8 +139,8 @@ post '/bet' do
 end
 
 get '/game' do
-  redirect to('/') if @player.nil? || @player.name.nil? || @player.name.strip.length.zero?
-  redirect to('/bet') if @player.bet.nil? || @player.bet.to_i.zero?
+  handle_expired_session
+
   ongoing_hand_exists ? @game.resume_hand : @game.play_hand
 
   if @game.round_over? && !@game.winnings_processed then
