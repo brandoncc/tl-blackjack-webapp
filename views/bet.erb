@@ -3,7 +3,7 @@
       <%= flash(:bet)[:error] %>
     </div>
 <% end %>
-<% if already_playing_hand %>
+<% if ongoing_hand_exists? %>
     <h4>I'm sorry, you are already playing a hand.</h4><br/>
     <p>
       <a href="/game" class="btn span4 btn-success clearfix" style="margin-left: 0px !important;">

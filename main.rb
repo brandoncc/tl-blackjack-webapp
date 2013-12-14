@@ -35,6 +35,27 @@ use Rack::Session::Pool, :expire_after => 60 * 60 * 24
 # 10. If user plays again, set chips to nil and ask for new bet. If chips are not set to nil, that is a potential bug
 #     where the user could just point the browser back to /game and it would use the same bet value as the last hand.
 
+helpers do
+  def ongoing_game_exists?
+    exists = false
+    if !(@game.nil? || @player.nil?)
+      exists = !@player.name.nil? || @player.name.strip.length > 0
+    end
+
+    exists
+  end
+
+  def ongoing_hand_exists?
+    exists = false
+
+    if !(@game.nil? || @player.nil?)
+      exists ||= @player.card_count > 0
+    end
+
+    return exists
+  end
+end
+
 def save_game_state
   session[:current_game] = @game
 end
@@ -56,31 +77,8 @@ def get_game_state
   end
 end
 
-def set_player_status
-
-end
-
 def setup_player(p)
   p.name = params[:name].strip
-end
-
-def ongoing_game_exists
-  exists = false
-  if !(@game.nil? || @player.nil?)
-    exists = !@player.name.nil? || @player.name.strip.length > 0
-  end
-
-  exists
-end
-
-def ongoing_hand_exists
-  exists = false
-
-  if !(@game.nil? || @player.nil?)
-    exists ||= @player.card_count > 0
-  end
-
-  return exists
 end
 
 def handle_expired_session
@@ -100,7 +98,7 @@ before '/game' do
 end
 
 get '/' do
-  erb :greet, locals: { already_playing_game: ongoing_game_exists }
+  erb :greet
 end
 
 post '/' do
@@ -118,7 +116,7 @@ post '/' do
 end
 
 get '/bet' do
-  erb :bet, locals: { already_playing_hand: ongoing_hand_exists }
+  erb :bet
 end
 
 post '/bet' do
@@ -141,7 +139,7 @@ end
 get '/game' do
   handle_expired_session
 
-  ongoing_hand_exists ? @game.resume_hand : @game.play_hand
+  ongoing_hand_exists? ? @game.resume_hand : @game.play_hand
 
   if @game.round_over? && !@game.winnings_processed then
     @game.process_winnings
