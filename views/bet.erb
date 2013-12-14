@@ -24,7 +24,11 @@
       <p><em>You currently have $<%= @player.chips %> available to bet.</em></p>
 
       <p>&nbsp;</p>
-      <input type="text" name="bet" class="span2"><br/>
-      <button type="submit" class="btn span2" style="margin-left: 0px !important;">Save Bet</button>
+<p>
+      <div class="input-prepend">
+        <span class="add-on">$</span>
+        <input type="text" name="bet" class="span2" placeholder="example: 10"><br/>
+      </div></p>
+      <p><button type="submit" class="btn span2" style="margin-left: 0px !important;">Save Bet</button></p>
     </form>
 <% end %>
