@@ -1,40 +1,42 @@
 <!-- show current player's cards, then loop through the other player's cards showing them -->
-<div class="player-cards-well well span<%= "#{CARD_WELL_SPAN_WIDTH}" %> pull-right">
-  <h5><%= "#{@current_player.name}" %>'s Cards</h5>
-  <hr/>
-  <div class="row">
-    <% @current_player.cards.each_with_index do |card, index| %>
-        <% if index % (CARD_WELL_SPAN_WIDTH / (@game.player_turn_over?(@current_player) ?
-                PLAYER_CARD_WIDTH_AFTER_PLAY : PLAYER_CARD_WIDTH_DURING_PLAY)) == 0 %>
-            <% if index > 0 %>
-                <%= '</div><div class="row">' %>
-            <% end %>
-        <% end %>
-        <div class="span<%= @game.player_turn_over?(@current_player) ?
-                                    "#{PLAYER_CARD_WIDTH_AFTER_PLAY}" : "#{PLAYER_CARD_WIDTH_DURING_PLAY}" %>">
-          <img src="<%= "#{card.image}" %>" class="playing-card"/>
-        </div>
-    <% end %>
-  </div>
-</div>
-
-<% @players.each_with_index do |p, i| %>
-    <% unless i == @game.current_player_index %>
+<% if @current_player.active %>
     <div class="player-cards-well well span<%= "#{CARD_WELL_SPAN_WIDTH}" %> pull-right">
-      <h5><%= "#{p.name}" %>'s Cards</h5>
+      <h5><%= "#{@current_player.name}" %>'s Cards</h5>
       <hr/>
       <div class="row">
-        <% p.cards.each_with_index do |card, index| %>
-            <% if index % (CARD_WELL_SPAN_WIDTH / PLAYER_CARD_WIDTH_AFTER_PLAY) == 0 %>
+        <% @current_player.cards.each_with_index do |card, index| %>
+            <% if index % (CARD_WELL_SPAN_WIDTH / (@game.player_turn_over?(@current_player) ?
+                    PLAYER_CARD_WIDTH_AFTER_PLAY : PLAYER_CARD_WIDTH_DURING_PLAY)) == 0 %>
                 <% if index > 0 %>
                     <%= '</div><div class="row">' %>
                 <% end %>
             <% end %>
-            <div class="span<%= "#{PLAYER_CARD_WIDTH_AFTER_PLAY}" %>">
+            <div class="span<%= @game.player_turn_over?(@current_player) ?
+                                        "#{PLAYER_CARD_WIDTH_AFTER_PLAY}" : "#{PLAYER_CARD_WIDTH_DURING_PLAY}" %>">
               <img src="<%= "#{card.image}" %>" class="playing-card"/>
             </div>
         <% end %>
       </div>
     </div>
+<% end %>
+
+<% @players.each_with_index do |p, i| %>
+    <% unless i == @game.current_player_index || !p.active %>
+        <div class="player-cards-well well span<%= "#{CARD_WELL_SPAN_WIDTH}" %> pull-right">
+          <h5><%= "#{p.name}" %>'s Cards</h5>
+          <hr/>
+          <div class="row">
+            <% p.cards.each_with_index do |card, index| %>
+                <% if index % (CARD_WELL_SPAN_WIDTH / PLAYER_CARD_WIDTH_AFTER_PLAY) == 0 %>
+                    <% if index > 0 %>
+                        <%= '</div><div class="row">' %>
+                    <% end %>
+                <% end %>
+                <div class="span<%= "#{PLAYER_CARD_WIDTH_AFTER_PLAY}" %>">
+                  <img src="<%= "#{card.image}" %>" class="playing-card"/>
+                </div>
+            <% end %>
+          </div>
+        </div>
     <% end %>
 <% end %>

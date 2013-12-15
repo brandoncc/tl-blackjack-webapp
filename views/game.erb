@@ -1,6 +1,6 @@
 <% PLAYER_CARD_WIDTH_DURING_PLAY = 2 %>
 <% PLAYER_CARD_WIDTH_AFTER_PLAY = 1 %>
-<% CARD_WELL_SPAN_WIDTH = 6 # MUST BE ODD!!!  %>
+<% CARD_WELL_SPAN_WIDTH = 6 # MUST BE ODD!!!   %>
 
 
 <div class="span12">
@@ -11,12 +11,12 @@
     <div class="span6 offset3">
       <%= erb :'_game_result' %>
       <% if @game.player_turn_over?(@current_player) && @game.next_player.nil? %>
-      <%= erb :'_dealer_cards' %>
-      <%= erb :'_player_cards' %>
-          <% else %>
+          <%= erb :'_dealer_cards' %>
+          <%= erb :'_player_cards' %>
+      <% else %>
           <%= erb :'_player_cards' %>
           <%= erb :'_dealer_cards' %>
-    <% end %>
+      <% end %>
     </div>
     <div class="span3">
       <p><%= erb :'_player_stats' %></p>

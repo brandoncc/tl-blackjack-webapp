@@ -18,3 +18,7 @@ ul.player-stats li.nav-header {
 ul.actions-list {
     width: 160px;
 }
+
+input[type="text"].player-name {
+    width: 233px;
+}

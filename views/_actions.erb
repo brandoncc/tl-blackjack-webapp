@@ -1,7 +1,7 @@
 <% if @game.round_over? %>
     <ul class="nav nav-list actions-list" style="padding: 8px 14px;">
       <li class="nav-header">GAME ACTIONS</li>
-      <% if @current_player.chips > 0 %>
+      <% if @players.select { |p| p.chips > 0 }.count > 0 %>
           <li><a href="/new_round"><i class="icon-play"></i> Play another round</a></li>
           <li><a href="/reset_game"><i class="icon-off"></i> Restart game</a></li>
       <% else %>

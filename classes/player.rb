@@ -77,6 +77,10 @@ class Player
       message += " #{@name} now has $#{@chips}."
     end
 
+    if @chips == 0
+      message += " #{@name} is out of chips and has stood up from the table."
+    end
+
     message
   end
 end

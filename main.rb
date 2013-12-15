@@ -84,7 +84,7 @@ def get_game_state
 end
 
 def next_player_to_bet
-  @players.select { |p| p.bet.nil? || p.bet == 0 }.first
+  @players.select { |p| p.active && (p.bet.nil? || p.bet == 0) }.first
 end
 
 def setup_new_game
@@ -185,12 +185,15 @@ end
 get '/game' do
   handle_expired_session
 
+  redirect to('/players/cleanup') unless @players.select { |p| !p.active }.count == 0
+
   @game.deal_hand unless ongoing_hand_exists?
 
   if @game.round_over? && !@game.winnings_processed then
     @game.process_winnings
     save_game_state
   end
+
   erb :game
 end
 
@@ -250,7 +253,13 @@ post '/players/add' do
 end
 
 get '/players/next' do
-    @game.start_next_players_turn
+  @game.start_next_players_turn
+  redirect to('/game')
+end
+
+get '/players/cleanup' do
+  @game.cleanup_inactive_players
+  save_game_state
   redirect to('/game')
 end
 

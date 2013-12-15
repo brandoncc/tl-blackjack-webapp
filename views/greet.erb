@@ -25,7 +25,7 @@
         <p>&nbsp;</p>
 
         <div class="input-append span4">
-          <input name="name" class="span3" type="text"
+          <input name="name" class="span3 player-name" type="text"
                  placeholder="<%= "#{@players.count}" %> / <%= "#{Blackjack::SEATS_AT_TABLE}" %> seats taken">
           <button type="submit" class="btn btn-warning"><i class='icon-user icon-white'></i> Sit down</button>
         </div>
@@ -33,7 +33,7 @@
     </div>
 <% end %>
 <div class="row">
-  <a href="/bet" type="button" class="span3 btn btn-success"><i class='icon-play icon-white'></i> Start game</a>
+  <a href="/bet" type="button" class="span3 btn btn-success">Start game <i class='icon-chevron-right icon-white'></i></a>
 </div>
 <p>&nbsp;</p>
 <h5>There are currently <%= @players.count %> players at the table</h5>

@@ -12,7 +12,9 @@
         <% end %>
         <li></li>
         <% @players.each do |p| %>
-            <li><%= p.build_hand_result_message %></li>
+            <% if p.bet > 0 %>
+                <li><%= p.build_hand_result_message %></li>
+            <% end %>
         <% end %>
       </ul>
     </div>

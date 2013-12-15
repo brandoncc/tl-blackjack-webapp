@@ -29,7 +29,7 @@ class Blackjack
 
   def deal_cards
     2.times do
-      @players.each { |p| p.cards << @deck.deal_one_card }
+      @players.each { |p| p.cards << @deck.deal_one_card if p.active }
       @dealer.cards << @deck.deal_one_card
     end
   end
@@ -105,6 +105,8 @@ class Blackjack
   def take_player_loss
     current_player.chips -= current_player.bet
     current_player.add_loss
+
+    current_player.active = false if current_player.chips == 0
   end
 
   def round_over?
@@ -112,9 +114,7 @@ class Blackjack
   end
 
   def dealer_turn_over?
-    status = hand_status
-
-    status == DEALER_BUSTED || status == DEALER_HAS_BLACKJACK || @dealer.hand_value >= DEALER_STAY_MINIMUM
+    @dealer.hand_value >= DEALER_STAY_MINIMUM
   end
 
   def player_turn_over?(player)
@@ -139,8 +139,9 @@ class Blackjack
     new_round
 
     @players.each do |p|
-      p.chips = 250
+      p.chips = INITIAL_CHIPS_VALUE
       p.reset_stats
+      p.active = true
     end
 
   end
@@ -173,10 +174,14 @@ class Blackjack
   end
 
   def all_players_out?
-    @players.select { |p| p.chips > 0 }.first.nil?
+    @players.select { |p| p.active } == 0
   end
 
   def next_player
     @players[@current_player_index + 1]
+  end
+
+  def cleanup_inactive_players
+    @players.delete_if { |p| !p.active }
   end
 end
