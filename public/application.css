@@ -22,3 +22,11 @@ ul.actions-list {
 input[type="text"].player-name {
     width: 233px;
 }
+
+div.navbar-inner ul.nav li + li {
+    border-left: solid 1px rgba(228, 228, 228, 07);
+}
+
+a.brand img {
+    height: 18px;
+}
