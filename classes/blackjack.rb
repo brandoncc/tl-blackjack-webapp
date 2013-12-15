@@ -110,7 +110,8 @@ class Blackjack
   end
 
   def round_over?
-    player_turn_over?(@current_player) && next_player.nil? && dealer_turn_over?
+    (player_turn_over?(@current_player) && next_player.nil? && dealer_turn_over?) ||
+        (@players.count == 1 && @players.first.hand_is_blackjack?)
   end
 
   def dealer_turn_over?
