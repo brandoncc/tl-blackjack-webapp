@@ -125,36 +125,12 @@ before '/game' do
 end
 
 get '/' do
-  #setup_new_game if @game.nil?
-  #setup_new_game if @players.nil?
-  #save_game_state
-
   if @players.count == Blackjack::SEATS_AT_TABLE
     flash(:players).now[:notice] = "All #{Blackjack::SEATS_AT_TABLE} seats are filled. Nothing left to do but start the game!"
   end
 
   erb :greet
 end
-
-#post '/' do
-  #if params.has_key?('name') && params[:name].strip.length > 0
-    #setup_new_game if @game.nil?
-
-    #setup_new_player
-    #if @players.count == Blackjack::SEATS_AT_TABLE
-    #  flash(:players)[:notice] = "All #{Blackjack::SEATS_AT_TABLE} seats are filled. Nothing left to do but start the game!"
-    #end
-    # player = @game.player
-
-    #setup_player(player)
-
-    #save_game_state
-    #redirect to('/')
-  #else
-    #flash(:players)[:error] = 'You must enter a name for your player.'
-    #redirect to('/')
-  #end
-#end
 
 get '/bet' do
   redirect to('/game') if @current_player.nil?
