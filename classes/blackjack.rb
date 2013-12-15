@@ -1,11 +1,12 @@
 class Blackjack
-  attr_accessor :player, :dealer, :deck, :winnings_processed
+  attr_accessor :players, :dealer, :deck, :winnings_processed
 
   INITIAL_CHIPS_VALUE  = 250
   DEALER_STAY_MINIMUM  = 17
   BLACKJACK_VALUE      = 21
   BLACKJACK_PAYOUT     = 3.0 / 2.0
   WIN_PAYOUT           = 1.0
+  SEATS_AT_TABLE       = 6
 
   # win codes
   PLAYER_HAS_BLACKJACK = 1001
@@ -18,10 +19,9 @@ class Blackjack
   GAME_IS_PUSH         = 3002
 
   def initialize
-    @player             = Player.new
+    @players            = {}
     @dealer             = Dealer.new
     @deck               = Deck.new
-    player.chips        = INITIAL_CHIPS_VALUE
     @winnings_processed = false
   end
 
@@ -115,5 +115,20 @@ class Blackjack
     new_round
     @player.chips = 250
     @player.reset_stats
+  end
+
+  def add_player(p)
+    player = Player.new
+    player.name = p
+
+    @players[normalize_player_name(p)] = player
+  end
+
+  def normalize_player_name(name)
+    name.gsub(/\s+/, '_').downcase
+  end
+
+  def player_exists?(name)
+    @players.has_key?(normalize_player_name(name))
   end
 end

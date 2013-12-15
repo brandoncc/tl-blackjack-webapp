@@ -67,18 +67,22 @@ end
 def get_game_state
   if !session[:current_game].nil? then
     @game = session[:current_game]
-    @player = session[:current_game].player
+    @players = session[:current_game].players
     @dealer = session[:current_game].dealer
     @deck = session[:current_game].deck
-
-    true
   else
-    nil
+    setup_new_game
   end
 end
 
-def setup_player(p)
-  p.name = params[:name].strip
+def setup_new_game
+  @game = Blackjack.new
+  save_game_state
+  get_game_state
+end
+
+def setup_new_player
+  @game.add_player(params[:name].strip)
 end
 
 def handle_expired_session
@@ -90,7 +94,7 @@ before do
 end
 
 before /^(?!\/$)/ do
-  handle_expired_session
+  #handle_expired_session
 end
 
 before '/game' do
@@ -98,22 +102,36 @@ before '/game' do
 end
 
 get '/' do
+  #setup_new_game if @game.nil?
+  #setup_new_game if @players.nil?
+  #save_game_state
+
+  if @players.count == Blackjack::SEATS_AT_TABLE
+    flash(:players).now[:notice] = "All #{Blackjack::SEATS_AT_TABLE} seats are filled. Nothing left to do but start the game!"
+  end
+
   erb :greet
 end
 
-post '/' do
-  if params.has_key?('name') && params[:name].strip.length > 0
-    @game = Blackjack.new
-    player = @game.player
+#post '/' do
+  #if params.has_key?('name') && params[:name].strip.length > 0
+    #setup_new_game if @game.nil?
 
-    setup_player(player)
+    #setup_new_player
+    #if @players.count == Blackjack::SEATS_AT_TABLE
+    #  flash(:players)[:notice] = "All #{Blackjack::SEATS_AT_TABLE} seats are filled. Nothing left to do but start the game!"
+    #end
+    # player = @game.player
 
-    save_game_state
-    redirect to('/bet')
-  else
-    redirect to('/')
-  end
-end
+    #setup_player(player)
+
+    #save_game_state
+    #redirect to('/')
+  #else
+    #flash(:players)[:error] = 'You must enter a name for your player.'
+    #redirect to('/')
+  #end
+#end
 
 get '/bet' do
   erb :bet
@@ -188,4 +206,25 @@ get '/actions/stay/:who' do
   end
   save_game_state
   redirect to('/game')
+end
+
+post '/players/add' do
+  if params.has_key?('name') && params[:name].strip.length > 0
+    unless @game.player_exists?(params[:name].strip)
+      setup_new_player
+    else
+      flash(:players)[:error] = "It looks like <strong>#{params[:name].strip}</strong> is already sitting at the table."
+    end
+  else
+    flash(:players)[:error] = 'You must enter a name for your player.'
+  end
+
+  save_game_state
+  redirect to('/')
+end
+
+get '/new/game' do
+  setup_new_game
+  save_game_state
+  redirect to('/')
 end
