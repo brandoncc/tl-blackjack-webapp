@@ -1,5 +1,6 @@
 class Blackjack
-  attr_accessor :players, :dealer, :deck, :winnings_processed, :current_player_index, :processed_last_players_actions
+  attr_accessor :players, :dealer, :deck, :winnings_processed, :current_player_index, :processed_last_players_actions,
+                :original_player_names
 
   INITIAL_CHIPS_VALUE  = 250
   DEALER_STAY_MINIMUM  = 17
@@ -25,6 +26,7 @@ class Blackjack
     @winnings_processed            = false
     @current_player_index          = 0
     @processed_last_players_action = false
+    @original_player_names         = []
   end
 
   def deal_cards
@@ -139,12 +141,8 @@ class Blackjack
   def reset_game
     new_round
 
-    @players.each do |p|
-      p.chips = INITIAL_CHIPS_VALUE
-      p.reset_stats
-      p.active = true
-    end
-
+    @players = []
+    @original_player_names.each { |n| add_player(n) }
   end
 
   def add_player(p)
@@ -152,6 +150,10 @@ class Blackjack
     player.name = p
 
     @players << player
+  end
+
+  def retain_player_name(p)
+    @original_player_names << p
   end
 
   def normalize_player_name(name)

@@ -95,6 +95,7 @@ end
 
 def setup_new_player
   @game.add_player(params[:name].strip)
+  @game.retain_player_name(params[:name].strip)
 end
 
 def handle_expired_session
