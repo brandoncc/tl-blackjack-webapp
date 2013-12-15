@@ -54,22 +54,22 @@ class Player
       message   += " got backjack! #{@name} won $#{(@bet * Blackjack::BLACKJACK_PAYOUT).ceil}."
       new_chips = @chips + (@bet * Blackjack::BLACKJACK_PAYOUT).ceil
     when Blackjack::PLAYER_BUSTED
-      message   += " busted. #{@name} lost his/her bet of $#{@bet}."
+      message   += " busted with #{hand_value}. #{@name} lost his/her bet of $#{@bet}."
       new_chips = @chips - @bet
     when Blackjack::PLAYER_WINS
-      message   += " won! #{@name} was awarded his/her winnings of $#{(@bet * Blackjack::WIN_PAYOUT).ceil}."
+      message   += " won with #{hand_value}! #{@name} was awarded his/her winnings of $#{(@bet * Blackjack::WIN_PAYOUT).ceil}."
       new_chips = @chips + (@bet * Blackjack::WIN_PAYOUT).ceil
     when Blackjack::DEALER_HAS_BLACKJACK
-      message   += " lost to the dealer's blackjack. #{@name} lost his/her bet of $#{@bet}."
+      message   += " lost with #{hand_value} to the dealer's blackjack. #{@name} lost his/her bet of $#{@bet}."
       new_chips = @chips - @bet
     when Blackjack::DEALER_BUSTED
-      message   += " won! #{@name} received $#{(@bet * Blackjack::WIN_PAYOUT).ceil}."
+      message   += " won with #{hand_value}! #{@name} received $#{(@bet * Blackjack::WIN_PAYOUT).ceil}."
       new_chips = @chips + (@bet * Blackjack::WIN_PAYOUT).ceil
     when Blackjack::DEALER_WINS
-      message   += " lost. #{@name} handed in his/her loss of $#{@bet}."
+      message   += " lost with #{hand_value}. #{@name} handed in his/her loss of $#{@bet}."
       new_chips = @chips - @bet
     when Blackjack::GAME_IS_PUSH
-      message   += "'s hand was a push. The original $#{@bet} bet stays on the table."
+      message   += "'s hand was a push at #{hand_value}. The original $#{@bet} bet stays on the table."
       new_chips = @chips
     end
 
