@@ -177,7 +177,7 @@ class Blackjack
   end
 
   def all_players_out?
-    @players.select { |p| p.active } == 0
+    @players.select { |p| !p.nil? && p.active }.count == 0
   end
 
   def next_player
@@ -185,6 +185,6 @@ class Blackjack
   end
 
   def cleanup_inactive_players
-    @players.delete_if { |p| !p.active }
+    @players.delete_if { |p| !p.nil? && !p.active }
   end
 end

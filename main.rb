@@ -46,8 +46,9 @@ helpers do
 
   def ongoing_game_exists?
     exists = false
-    if !(@game.nil? || @player.nil?)
-      exists = !@player.name.nil? || @player.name.strip.length > 0
+    if !(@game.nil? || @game.all_players_out?)
+      exists ||= @dealer.cards.count > 0
+      exists ||= ongoing_hand_exists?
     end
 
     exists
@@ -56,8 +57,10 @@ helpers do
   def ongoing_hand_exists?
     exists = false
 
-    unless @game.nil? || @game.current_player.nil?
-      exists ||= !@players.select { |p| p.card_count > 0 }.first.nil?
+    unless @game.nil? || @players.count == 0
+      return false if @players.last.bet.nil? || @players.last.bet.to_i == 0 ||
+          !(@players.last.bet.to_s =~ /\A[-+]?\d*\.?\d+\z/)
+      exists ||= !(@game.all_players_finished? || @game.dealer_turn_over?)
     end
 
     return exists
@@ -164,7 +167,7 @@ get '/game' do
 
   redirect to('/players/cleanup') unless @players.select { |p| !p.active }.count == 0
 
-  @game.deal_hand unless ongoing_hand_exists?
+  @game.deal_hand unless players_have_cards?
 
   if @game.round_over? && !@game.winnings_processed then
     @game.process_winnings
