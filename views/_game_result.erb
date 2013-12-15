@@ -18,7 +18,7 @@
         <% end %>
       </ul>
     </div>
-<% elsif @game.player_turn_over?(@current_player) && @dealer.card_count == 2 && !@game.dealer_turn_over? %>
+<% elsif @game.player_turn_over?(@current_player) && @dealer.card_count == 2 %>
     <div class="alert alert-info span<%= "#{CARD_WELL_SPAN_WIDTH}" %> pull-right" style="padding: 8px 19px 8px 19px;">
       <% if @current_player.hand_value > Blackjack::BLACKJACK_VALUE %>
           Oops,
