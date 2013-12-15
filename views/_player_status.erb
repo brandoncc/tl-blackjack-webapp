@@ -1,10 +1,19 @@
-<div class="alert" style="margin-bottom: 0px; padding: 8px 14px">
-  <% if @player.finished %>
-      <%= @player.name %> stayed at:
-  <% else %>
-      <%= @player.name %>'s current score is:
-  <% end %>
-  <strong style="display: inline-block;"><%= "#{@player.hand_is_soft_or_hard.nil? ?
-          '' :
-          "#{@player.hand_is_soft_or_hard} " } #{@player.hand_value}" %></strong>
-</div>
+<% @players.each do |p| %>
+    <li>
+      <div class="alert" style="margin-bottom: 0px; padding: 8px 14px">
+        <% if p.finished %>
+            <%= p.name %> stayed at:
+        <% else %>
+            <%= p.name %>'s current score is:
+        <% end %>
+        <% if p.hand_is_blackjack? %>
+        <strong>blackjack!</strong>
+        <% else %>
+        <strong style="display: inline-block;"><%= "#{p.hand_is_soft_or_hard.nil? ?
+                '' :
+                "#{p.hand_is_soft_or_hard} " } #{p.hand_value}" %></strong>
+            <% end %>
+      </div>
+    </li>
+    <li>&nbsp;</li>
+<% end %>

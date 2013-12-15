@@ -1,62 +1,31 @@
 <% if @game.round_over? %>
-    <% case @game.game_status
-       when Blackjack::PLAYER_HAS_BLACKJACK
-         alert_class = 'win'
-         message     = "Congratulations, #{@player.name} got blackjack!"
-       when Blackjack::PLAYER_WINS
-         alert_class = 'win'
-         message     = "Whew, #{@player.name} won!"
-       when Blackjack::PLAYER_BUSTED
-         alert_class = 'lose'
-         message     = "Whoops! #{@player.name} took a chance and lost!"
-       when Blackjack::DEALER_HAS_BLACKJACK
-         alert_class = 'lose'
-         message     = 'Dealer got blackjack. Better luck next time.'
-       when Blackjack::DEALER_BUSTED
-         alert_class = 'win'
-         message     = "Dealer busted. #{@player.name} won!"
-       when Blackjack::DEALER_WINS
-         alert_class = 'lose'
-         message     = 'Dealer won this round, better luck next time.'
-       when Blackjack::NO_WINNER_YET
-         alert_class = 'lose'
-         message     = 'I am not sure why you are seeing this, there is no winner yet.'
-       when Blackjack::GAME_IS_PUSH
-         alert_class = 'win'
-         message     = 'Looks like this round was a push.'
-       end %>
-
-    <% alert_class = (alert_class == 'win' ? 'success' : 'danger') %>
-    <div class="alert alert-<%= "#{alert_class}" %> span<%= "#{CARD_WELL_SPAN_WIDTH}" %> pull-right" style="padding: 8px 23px 8px 14px;">
-      <%= "#{message}" %>
-      <%= if @game.game_status == Blackjack::PLAYER_HAS_BLACKJACK
-            '<br /><br />' +
-                    "#{@player.name}'s final hand value: #{@player.hand_value}." + '<br />' +
-                    "Dealer's final hand value: #{@dealer.card_showing}."
-          else
-            '<br /><br />' +
-                    "#{@player.name}'s final hand value: #{@player.hand_value}." + '<br />' +
-                    "Dealer's final hand value: #{@dealer.hand_value}."
-          end
-      %>
-      <p>&nbsp;</p>
-      <% if @player.chips < 1 %>
-          <p>Unfortunately, you are out of chips. Game over.</p>
+    <div class="alert alert-info span<%= "#{CARD_WELL_SPAN_WIDTH}" %> pull-right" style="padding: 8px 19px 8px 19px;">
+      <h4 style="text-align: center">Game results</h4>
+      <hr/>
+      <ul class="unstyled">
+        <% if @dealer.hand_is_blackjack? %>
+            <li>The dealer got blackjack.</li>
+        <% elsif @dealer.hand_is_bust? %>
+            <li>The dealer busted with a score of <%= "#{@dealer.hand_value}" %>.</li>
+        <% else %>
+            <li>The dealer finished the hand with a score of <%= "#{@dealer.hand_value}" %>.</li>
+        <% end %>
+        <li></li>
+        <% @players.each do |p| %>
+            <li><%= p.build_hand_result_message %></li>
+        <% end %>
+      </ul>
+    </div>
+<% elsif @game.player_turn_over?(@current_player) && @dealer.card_count == 2 && !@game.dealer_turn_over? %>
+    <div class="alert alert-info span<%= "#{CARD_WELL_SPAN_WIDTH}" %> pull-right" style="padding: 8px 19px 8px 19px;">
+      <% if @current_player.hand_value > Blackjack::BLACKJACK_VALUE %>
+          Oops,
+          <%= "#{@current_player.name}" %> busted!
+      <% elsif @current_player.hand_value == Blackjack::BLACKJACK_VALUE && @current_player.card_count == 2 %>
+          Congratulations, <%= "#{@current_player.name}" %> got blackjack!
       <% else %>
-          <% if @game.player_wins? %>
-              <p>
-                You have been awarded <strong>$<%= "#{@game.player_winnings_amount}" %></strong>.
-                You now have <strong>$<%= "#{@player.chips}" %></strong>.
-              </p>
-          <% elsif @game.game_status == Blackjack::GAME_IS_PUSH %>
-              <%= "#{@player.name}'s bet of $#{@player.bet} will stay " +
-                  "on the table."  %>
-          <% else %>
-              <p>
-                You have lost <strong>$<%= "#{@player.bet}" %></strong>.
-                You now have <strong>$<%= "#{@player.chips}" %></strong>.
-              </p>
-          <% end %>
+          <%= "#{@current_player.name}" %> stayed at
+          <%= "#{@current_player.hand_value}" %>.
       <% end %>
     </div>
 <% end %>

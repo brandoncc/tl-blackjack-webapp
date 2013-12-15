@@ -19,16 +19,21 @@
 <% else %>
     <form method="post">
 
-      <h4><%= @player.name %>, how much would you like to bet on this hand?</h4>
+      <h4><%= @current_player.name %>, how much would you like to bet on this hand?</h4>
 
-      <p><em>You currently have $<%= @player.chips %> available to bet.</em></p>
+      <p><em>You currently have $<%= @current_player.chips %> available to bet.</em></p>
 
       <p>&nbsp;</p>
-<p>
+
+      <p>
+
       <div class="input-prepend">
         <span class="add-on">$</span>
         <input type="text" name="bet" class="span2" placeholder="example: 10"><br/>
-      </div></p>
-      <p><button type="submit" class="btn span2" style="margin-left: 0px !important;">Save Bet</button></p>
+      </div>
+      </p>
+      <p>
+        <button type="submit" class="btn span2 btn-success" style="margin-left: 0px !important;">Save Bet</button>
+      </p>
     </form>
 <% end %>

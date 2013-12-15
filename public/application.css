@@ -6,3 +6,15 @@
     -moz-border-radius: 3px;
     border-radius: 3px;
 }
+
+ul.player-stats li:not(.nav-header) {
+    font-size: 0.8em;
+}
+
+ul.player-stats li.nav-header {
+    font-size: 1.2em;
+}
+
+ul.actions-list {
+    width: 160px;
+}

@@ -1,7 +1,7 @@
 <div id="dealer-cards" class="well span<%= "#{CARD_WELL_SPAN_WIDTH}" %> pull-right">
   <h5>Dealer's Cards</h5>
   <hr />
-    <% if @player.finished %>
+    <% if @game.all_players_finished? %>
         <div class="row">
           <% @dealer.cards.each_with_index do |card, index| %>
               <% if index % (CARD_WELL_SPAN_WIDTH / 2) == 0 %>

@@ -1,5 +1,5 @@
 class Blackjack
-  attr_accessor :players, :dealer, :deck, :winnings_processed
+  attr_accessor :players, :dealer, :deck, :winnings_processed, :current_player_index, :processed_last_players_actions
 
   INITIAL_CHIPS_VALUE  = 250
   DEALER_STAY_MINIMUM  = 17
@@ -19,109 +19,137 @@ class Blackjack
   GAME_IS_PUSH         = 3002
 
   def initialize
-    @players            = {}
-    @dealer             = Dealer.new
-    @deck               = Deck.new
-    @winnings_processed = false
+    @players                       = []
+    @dealer                        = Dealer.new
+    @deck                          = Deck.new
+    @winnings_processed            = false
+    @current_player_index          = 0
+    @processed_last_players_action = false
   end
 
   def deal_cards
     2.times do
-      @player.cards << @deck.deal_one_card
+      @players.each { |p| p.cards << @deck.deal_one_card }
       @dealer.cards << @deck.deal_one_card
     end
   end
 
-  def play_hand
+  def deal_hand
     deal_cards
   end
 
   def resume_hand
-    puts 'hand resumed'
+    # continue with current cards and scores
   end
 
-  def game_status
-    return PLAYER_HAS_BLACKJACK if @player.hand_is_blackjack?
-    return PLAYER_BUSTED if @player.hand_is_bust?
+  def hand_status
+    return PLAYER_HAS_BLACKJACK if current_player.hand_is_blackjack?
+    return PLAYER_BUSTED if current_player.hand_is_bust?
     return DEALER_HAS_BLACKJACK if @dealer.hand_is_blackjack?
     return DEALER_BUSTED if @dealer.hand_is_bust?
 
-    return NO_WINNER_YET unless (@player.finished || @player.hand_is_bust? || @player.hand_is_blackjack?) &&
-        @dealer.hand_value >= DEALER_STAY_MINIMUM
+    return NO_WINNER_YET unless (current_player.finished || current_player.hand_is_bust? ||
+        current_player.hand_is_blackjack?) && @dealer.hand_value >= DEALER_STAY_MINIMUM
 
-    return GAME_IS_PUSH if @player.hand_value == @dealer.hand_value
+    return GAME_IS_PUSH if current_player.hand_value == @dealer.hand_value
     return PLAYER_WINS if player_wins?
     return DEALER_WINS if !player_wins?
     return NO_WINNER_YET
   end
 
   def player_wins?
-    @dealer.hand_is_bust? || @player.hand_is_blackjack? ||
-        (!@player.hand_is_bust? && @player.hand_value > @dealer.hand_value)
+    @dealer.hand_is_bust? || current_player.hand_is_blackjack? ||
+        (!current_player.hand_is_bust? && current_player.hand_value > @dealer.hand_value)
   end
 
   def process_winnings
-    case game_status
-    when PLAYER_HAS_BLACKJACK
-      award_player_win
-    when PLAYER_BUSTED
-      take_player_loss
-    when DEALER_HAS_BLACKJACK
-      take_player_loss
-    when DEALER_BUSTED
-      award_player_win
-    when PLAYER_WINS
-      award_player_win
-    when DEALER_WINS
-      take_player_loss
-    when GAME_IS_PUSH
-      @player.add_push
+    @current_player_index = 0
+    @players.each_with_index do |_, i|
+      @current_player_index = i
+
+      case hand_status
+      when PLAYER_HAS_BLACKJACK
+        award_player_win
+      when PLAYER_BUSTED
+        take_player_loss
+      when DEALER_HAS_BLACKJACK
+        take_player_loss
+      when DEALER_BUSTED
+        award_player_win
+      when PLAYER_WINS
+        award_player_win
+      when DEALER_WINS
+        take_player_loss
+      when GAME_IS_PUSH
+        current_player.add_push
+      end
+      current_player.last_hand_result = hand_status
     end
+
     @winnings_processed = true
   end
 
   def award_player_win
-    @player.chips += player_winnings_amount
-    @player.add_win
+    current_player.chips += player_winnings_amount
+    current_player.add_win
   end
 
   def player_winnings_amount
-    if game_status == PLAYER_HAS_BLACKJACK
-      (@player.bet * BLACKJACK_PAYOUT).ceil
+    if hand_status == PLAYER_HAS_BLACKJACK
+      (current_player.bet * BLACKJACK_PAYOUT).ceil
     else
-      (@player.bet * WIN_PAYOUT).ceil
+      (current_player.bet * WIN_PAYOUT).ceil
     end
   end
 
   def take_player_loss
-    @player.chips -= @player.bet
-    @player.add_loss
+    current_player.chips -= current_player.bet
+    current_player.add_loss
   end
 
   def round_over?
-    (@player.hand_is_bust? || @player.hand_is_blackjack?) ||
-        (@player.finished && @dealer.hand_value >= DEALER_STAY_MINIMUM)
+    player_turn_over?(@current_player) && next_player.nil? && dealer_turn_over?
+  end
+
+  def dealer_turn_over?
+    status = hand_status
+
+    status == DEALER_BUSTED || status == DEALER_HAS_BLACKJACK || @dealer.hand_value >= DEALER_STAY_MINIMUM
+  end
+
+  def player_turn_over?(player)
+    player = player.nil? ? current_player : player
+
+    player.finished == true || player.hand_is_bust? || player.hand_is_blackjack?
   end
 
   def new_round
-    @player.bet         = 0
-    @winnings_processed = false
-    @player.finished    = false
-    @player.discard_cards(@deck)
+    @players.each do |p|
+      p.bet      = 0
+      p.finished = false
+      p.discard_cards(@deck)
+    end
+
+    @current_player_index = 0
+    @winnings_processed   = false
     @dealer.discard_cards(@deck)
   end
 
   def reset_game
     new_round
-    @player.chips = 250
-    @player.reset_stats
+
+    @players.each do |p|
+      p.chips = 250
+      p.reset_stats
+    end
+
   end
 
   def add_player(p)
-    player = Player.new
+    player      = Player.new
     player.name = p
 
-    @players[normalize_player_name(p)] = player
+    @players << player
   end
 
   def normalize_player_name(name)
@@ -129,6 +157,26 @@ class Blackjack
   end
 
   def player_exists?(name)
-    @players.has_key?(normalize_player_name(name))
+    !@players.select { |p| normalize_player_name(p.name) == normalize_player_name(name) }.first.nil?
+  end
+
+  def start_next_players_turn
+    @current_player_index += 1
+  end
+
+  def current_player
+    @players[@current_player_index]
+  end
+
+  def all_players_finished?
+    player_turn_over?(current_player) && next_player.nil?
+  end
+
+  def all_players_out?
+    @players.select { |p| p.chips > 0 }.first.nil?
+  end
+
+  def next_player
+    @players[@current_player_index + 1]
   end
 end

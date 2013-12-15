@@ -36,6 +36,14 @@ use Rack::Session::Pool, :expire_after => 60 * 60 * 24
 #     where the user could just point the browser back to /game and it would use the same bet value as the last hand.
 
 helpers do
+  def get_current_player
+    unless @game.nil?
+      @current_player = @game.current_player
+    else
+      nil
+    end
+  end
+
   def ongoing_game_exists?
     exists = false
     if !(@game.nil? || @player.nil?)
@@ -48,8 +56,8 @@ helpers do
   def ongoing_hand_exists?
     exists = false
 
-    if !(@game.nil? || @player.nil?)
-      exists ||= @player.card_count > 0
+    unless @game.nil? || @game.current_player.nil?
+      exists ||= !@players.select { |p| p.card_count > 0 }.first.nil?
     end
 
     return exists
@@ -75,6 +83,10 @@ def get_game_state
   end
 end
 
+def next_player_to_bet
+  @players.select { |p| p.bet.nil? || p.bet == 0 }.first
+end
+
 def setup_new_game
   @game = Blackjack.new
   save_game_state
@@ -86,19 +98,30 @@ def setup_new_player
 end
 
 def handle_expired_session
-  redirect to('/') if @player.nil? || @player.name.nil? || @player.name.strip.length.zero?
+  redirect to('/') if @game.nil? || @game.players.count == 0
 end
 
 before do
   get_game_state
 end
 
+# do not execute for /
 before /^(?!\/$)/ do
-  #handle_expired_session
+  get_current_player
+end
+
+# do not execute for / or /players/add
+before /^(?!\/$|\/players\/add$)/ do
+  handle_expired_session
+end
+
+before '/bet' do
+  @current_player = next_player_to_bet
 end
 
 before '/game' do
-  redirect to('/bet') if @player.bet.nil? || @player.bet.to_i.zero? || !(@player.bet.to_s =~ /\A[-+]?\d*\.?\d+\z/)
+  redirect to('/bet') unless next_player_to_bet.nil?
+  get_current_player
 end
 
 get '/' do
@@ -134,32 +157,35 @@ end
 #end
 
 get '/bet' do
+  redirect to('/game') if @current_player.nil?
+
   erb :bet
 end
 
 post '/bet' do
   if params.has_key?('bet') && params[:bet].to_s =~ /\A[-+]?\d*\.?\d+\z/ && params[:bet].to_i > 0 &&
-      params[:bet].to_i <= @player.chips
-    @player.bet = params[:bet].to_i
+      params[:bet].to_i <= @current_player.chips
+    @current_player.bet = params[:bet].to_i
 
     save_game_state
-    redirect to('/game')
   else
     if !(params[:bet].to_s =~ /\A[-+]?\d*\.?\d+\z/)
       flash(:bet)[:error] = "Sorry, <strong>#{params[:bet]}</strong> is not a valid number."
-    elsif params[:bet].to_s =~ /\A[-+]?\d*\.?\d+\z/ && params[:bet].to_i > 0 && params[:bet].to_i > @player.chips
+    elsif params[:bet].to_s =~ /\A[-+]?\d*\.?\d+\z/ && params[:bet].to_i > 0 &&
+        params[:bet].to_i > @current_player.chips
       flash(:bet)[:error] =
           "Sorry, you cannot bet <strong>$#{params[:bet]}</strong>. " +
-          "You currently have <strong>$#{@player.chips}</strong>."
+          "You currently have <strong>$#{@current_player.chips}</strong>."
     end
-    redirect back
   end
+
+  redirect to('/bet')
 end
 
 get '/game' do
   handle_expired_session
 
-  ongoing_hand_exists? ? @game.resume_hand : @game.play_hand
+  @game.deal_hand unless ongoing_hand_exists?
 
   if @game.round_over? && !@game.winnings_processed then
     @game.process_winnings
@@ -169,19 +195,19 @@ get '/game' do
 end
 
 get '/new_round' do
-  push = @game.game_status == Blackjack::GAME_IS_PUSH
-  prev_bet = @player.bet
-  @game.new_round
-
-  if push
-    @player.bet = prev_bet
-    redir_path = '/game'
-  else
-    redir_path = '/bet'
+  push_bets = []
+  @players.each do |p|
+    if p.last_hand_result == Blackjack::GAME_IS_PUSH
+      push_bets << p.bet
+    else
+      push_bets << nil
+    end
   end
 
+  @game.new_round
+  @players.each_with_index { |p, i| p.bet = push_bets[i] unless push_bets[i].nil? }
   save_game_state
-  redirect to(redir_path)
+  redirect to('/bet')
 end
 
 get '/reset_game' do
@@ -192,7 +218,7 @@ end
 
 get '/actions/hit/:who' do
   case params[:who]
-  when 'player' then @player.give_card(@deck.deal_one_card)
+  when 'player' then @current_player.give_card(@deck.deal_one_card)
   when 'dealer' then @dealer.give_card(@deck.deal_one_card)
   end
   save_game_state
@@ -201,7 +227,7 @@ end
 
 get '/actions/stay/:who' do
   case params[:who]
-  when 'player' then @player.finished = true
+  when 'player' then @current_player.finished = true
   when 'dealer' then @dealer.finished = true
   end
   save_game_state
@@ -221,6 +247,11 @@ post '/players/add' do
 
   save_game_state
   redirect to('/')
+end
+
+get '/players/next' do
+    @game.start_next_players_turn
+  redirect to('/game')
 end
 
 get '/new/game' do
