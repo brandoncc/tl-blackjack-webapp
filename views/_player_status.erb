@@ -18,25 +18,3 @@
     </li>
     <li>&nbsp;</li>
 <% end %>
-
-<% @players.each_with_index do |p, i| %>
-    <% unless i == @game.current_player_index || !p.active %>
-        <li>
-          <div class="alert" style="margin-bottom: 0px; padding: 8px 14px">
-            <% if p.finished %>
-                <%= p.name %> stayed at:
-            <% else %>
-                <%= p.name %>'s current score is:
-            <% end %>
-            <% if p.hand_is_blackjack? %>
-                <strong>blackjack!</strong>
-            <% else %>
-                <strong style="display: inline-block;"><%= "#{p.hand_is_soft_or_hard.nil? ?
-                        '' :
-                        "#{p.hand_is_soft_or_hard} " } #{p.hand_value}" %></strong>
-            <% end %>
-          </div>
-        </li>
-        <li>&nbsp;</li>
-    <% end %>
-<% end %>
