@@ -10,35 +10,43 @@
 <% end %>
 <% if ongoing_game_exists? %>
     <div class="alert alert-error clearfix">
-      <p class="span12">Warning, <strong><%= "#{@player.name}" %></strong> is already playing a game.</p>
+      <p class="span12">Warning, there is already a game in progress.</p>
 
-      <p><a href="/game" class="btn btn-info span3">Click here to resume</a></p>
+      <p><a href="/game" class="btn btn-success span3">Click here to resume</a></p>
+
+      <p><a href="/new/game" class="btn btn-danger span3">Click here to clear the table</a></p>
     </div>
-<% end %>
-<p>&nbsp;</p>
+<% else %>
+    <% if @players.count < Blackjack::SEATS_AT_TABLE %>
+        <div class="row">
+          <form action="/players/add" method="post">
+            <h4 class="span12">Hello, what is your name?</h4>
 
-<% if @players.count < Blackjack::SEATS_AT_TABLE %>
-    <div class="row">
-      <form action="/players/add" method="post">
-        <h4 class="span12">Hello, what is your name?</h4>
+            <p>&nbsp;</p>
 
-        <p>&nbsp;</p>
-
-        <div class="input-append span4">
-          <input name="name" class="span3 player-name" type="text"
-                 placeholder="<%= "#{@players.count}" %> / <%= "#{Blackjack::SEATS_AT_TABLE}" %> seats taken">
-          <button type="submit" class="btn btn-warning"><i class='icon-user icon-white'></i> Sit down</button>
+            <div class="input-append span4">
+              <input name="name" class="span3 player-name" type="text"
+                     placeholder="<%= "#{@players.count}" %> / <%= "#{Blackjack::SEATS_AT_TABLE}" %> seats taken">
+              <button type="submit" class="btn btn-warning"><i class='icon-user icon-white'></i> Sit down</button>
+            </div>
+          </form>
         </div>
-      </form>
+    <% end %>
+    <div class="row">
+      <a href="/bet" type="button" class="span3 btn btn-success">Start game
+        <i class='icon-chevron-right icon-white'></i></a>
     </div>
+    <p>&nbsp;</p>
+    <h5>There are currently <%= @players.count %> players at the table</h5>
+    <ol class="player-list">
+      <% @players.each do |p| %>
+          <li><%= p.name %></li>
+      <% end %>
+    </ol>
+    <% if @players.count > 0 %>
+        <div class="row">
+          <a href="/new/game" type="button" class="span3 btn btn-danger">Clear the table
+            <i class='icon-chevron-right icon-white'></i></a>
+        </div>
+    <% end %>
 <% end %>
-<div class="row">
-  <a href="/bet" type="button" class="span3 btn btn-success">Start game <i class='icon-chevron-right icon-white'></i></a>
-</div>
-<p>&nbsp;</p>
-<h5>There are currently <%= @players.count %> players at the table</h5>
-<ol class="player-list">
-  <% @players.each do |p| %>
-      <li><%= p.name %></li>
-  <% end %>
-</ol>

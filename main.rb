@@ -65,6 +65,10 @@ helpers do
 
     return exists
   end
+
+  def players_have_cards?
+    @players.last.cards.count > 0
+  end
 end
 
 def save_game_state
@@ -133,12 +137,12 @@ get '/' do
     flash(:players).now[:notice] = "All #{Blackjack::SEATS_AT_TABLE} seats are filled. Nothing left to do but start the game!"
   end
 
+  redirect to('/new/game') if @game.all_players_out? && @players.count > 0
+
   erb :greet
 end
 
 get '/bet' do
-  redirect to('/game') if @current_player.nil?
-
   erb :bet
 end
 
@@ -159,7 +163,11 @@ post '/bet' do
     end
   end
 
-  redirect to('/bet')
+  if next_player_to_bet.nil?
+    redirect to('/game')
+  else
+    redirect to('/bet')
+  end
 end
 
 get '/game' do
