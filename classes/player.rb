@@ -5,9 +5,10 @@ class Player
   include Dealable
   include Bettable
 
-  attr_accessor :name, :cards, :stats, :finished
+  attr_accessor :name, :cards, :stats, :finished, :active
 
   def initialize
+    @active   = true
     @finished = false
     @cards    = []
     reset_stats
