@@ -178,7 +178,7 @@ get '/actions/hit/:who' do
   when 'dealer' then @dealer.give_card(@deck.deal_one_card)
   end
   save_game_state
-  redirect to('/game')
+  erb :game, layout: false
 end
 
 get '/actions/stay/:who' do
@@ -187,5 +187,5 @@ get '/actions/stay/:who' do
   when 'dealer' then @dealer.finished = true
   end
   save_game_state
-  redirect to('/game')
+  erb :game, layout: false
 end
