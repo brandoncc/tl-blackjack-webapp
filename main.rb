@@ -85,6 +85,15 @@ def handle_expired_session
   redirect to('/') if @player.nil? || @player.name.nil? || @player.name.strip.length.zero?
 end
 
+def handle_completed_round
+  ongoing_hand_exists? ? @game.resume_hand : @game.play_hand
+
+  if @game.round_over? && !@game.winnings_processed then
+    @game.process_winnings
+    save_game_state
+  end
+end
+
 before do
   get_game_state
 end
@@ -141,12 +150,8 @@ end
 get '/game' do
   handle_expired_session
 
-  ongoing_hand_exists? ? @game.resume_hand : @game.play_hand
+  handle_completed_round
 
-  if @game.round_over? && !@game.winnings_processed then
-    @game.process_winnings
-    save_game_state
-  end
   erb :game
 end
 
@@ -178,6 +183,8 @@ get '/actions/hit/:who' do
   when 'dealer' then @dealer.give_card(@deck.deal_one_card)
   end
   save_game_state
+  handle_completed_round
+
   erb :game, layout: false
 end
 
@@ -187,5 +194,7 @@ get '/actions/stay/:who' do
   when 'dealer' then @dealer.finished = true
   end
   save_game_state
+  handle_completed_round
+
   erb :game, layout: false
 end
