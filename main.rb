@@ -143,6 +143,8 @@ get '/' do
 end
 
 get '/bet' do
+  redirect to('/game') if @game.all_players_had_push
+
   erb :bet
 end
 

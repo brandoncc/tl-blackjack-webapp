@@ -188,4 +188,8 @@ class Blackjack
   def cleanup_inactive_players
     @players.delete_if { |p| !p.nil? && !p.active }
   end
+
+  def all_players_had_push
+    @players.select { |p| p.last_hand_result == GAME_IS_PUSH }.count == @players.count
+  end
 end
