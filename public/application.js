@@ -5,9 +5,8 @@ $(document).ready(function() {
             url: '/actions/hit/dealer'
         }).done(function(r) {
             $('div#game').replaceWith(r);
-            return false;
         });
-        event.preventDefault()
+        event.preventDefault();
     });
 
     $(document).on('click', 'a#hit_player', function() {
@@ -16,9 +15,8 @@ $(document).ready(function() {
             url: '/actions/hit/player'
         }).done(function(r) {
             $('div#game').replaceWith(r);
-            return false;
         });
-        event.preventDefault()
+        event.preventDefault();
     });
 
     $(document).on('click', 'a#stay_player', function() {
@@ -27,30 +25,7 @@ $(document).ready(function() {
             url: '/actions/stay/player'
         }).done(function(r) {
             $('div#game').replaceWith(r);
-            return false;
         });
-        event.preventDefault()
-    });
-
-    $(document).on('click', 'a.reset-game', function() {
-        $.ajax({
-            type: 'POST',
-            url: '/reset_game'
-        }).done(function(r) {
-            $('div#game').replaceWith(r);
-            return false;
-        });
-        event.preventDefault()
-    });
-
-    $(document).on('click', 'a.new-round', function() {
-        $.ajax({
-            type: 'POST',
-            url: '/new_round'
-        }).done(function(r) {
-            $('div#game').replaceWith(r);
-            return false;
-        });
-        event.preventDefault()
+        event.preventDefault();
     });
 });

@@ -155,7 +155,7 @@ get '/game' do
   erb :game
 end
 
-post '/new_round' do
+get '/new_round' do
   push = @game.game_status == Blackjack::GAME_IS_PUSH
   prev_bet = @player.bet
   @game.new_round
@@ -171,7 +171,7 @@ post '/new_round' do
   redirect to(redir_path)
 end
 
-post '/reset_game' do
+get '/reset_game' do
   @game.reset_game
   save_game_state
   redirect to('/bet')
