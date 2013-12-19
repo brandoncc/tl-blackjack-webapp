@@ -2,10 +2,10 @@
     <ul class="nav nav-list" style="padding: 8px 14px;">
       <li class="nav-header">GAME ACTIONS</li>
       <% if @player.chips > 0 %>
-          <li><a href="/new_round"><i class="icon-play"></i> Play another round</a></li>
-          <li><a href="/reset_game"><i class="icon-off"></i> Restart game</a></li>
+          <li><a href="/new_round" class="new-round"><i class="icon-play"></i> Play another round</a></li>
+          <li><a href="/reset_game" class="reset-game"><i class="icon-off"></i> Restart game</a></li>
       <% else %>
-          <li><a href="/reset_game"><i class="icon-play"></i> Play a new game</a></li>
+          <li><a href="/reset_game" class="reset-game"><i class="icon-play"></i> Play a new game</a></li>
       <% end %>
     </ul>
 <% else %>

@@ -155,7 +155,7 @@ get '/game' do
   erb :game
 end
 
-get '/new_round' do
+post '/new_round' do
   push = @game.game_status == Blackjack::GAME_IS_PUSH
   prev_bet = @player.bet
   @game.new_round
@@ -171,13 +171,13 @@ get '/new_round' do
   redirect to(redir_path)
 end
 
-get '/reset_game' do
+post '/reset_game' do
   @game.reset_game
   save_game_state
   redirect to('/bet')
 end
 
-get '/actions/hit/:who' do
+post '/actions/hit/:who' do
   case params[:who]
   when 'player' then @player.give_card(@deck.deal_one_card)
   when 'dealer' then @dealer.give_card(@deck.deal_one_card)
@@ -188,7 +188,7 @@ get '/actions/hit/:who' do
   erb :game, layout: false
 end
 
-get '/actions/stay/:who' do
+post '/actions/stay/:who' do
   case params[:who]
   when 'player' then @player.finished = true
   when 'dealer' then @dealer.finished = true
