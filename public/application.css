@@ -1,3 +1,8 @@
+body {
+    margin: 0px;
+    background-color: rgba(126, 126, 126, 0.51) !important;
+}
+
 .playing-card {
     border: 1px solid black;
     margin-top: 10px;
@@ -12,11 +17,23 @@ ul.player-stats li:not(.nav-header) {
 }
 
 ul.player-stats li.nav-header {
-    font-size: 1.2em;
+    font-size: 1em;
 }
 
-ul.actions-list {
-    width: 160px;
+div.actions-list {
+    margin-top: -400px;
+}
+
+div.actions-list ul {
+    max-width: 160px;
+    padding: 0;
+}
+
+div.lower-opacity {
+    -moz-opacity: 0.90;
+    -khtml-opacity: 0.90;
+    opacity: 0.90;
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha"(Opacity=90);
 }
 
 input[type="text"].player-name {
@@ -30,3 +47,317 @@ div.navbar-inner ul.nav li + li {
 a.brand img {
     height: 18px;
 }
+
+div#table {
+    background: url('/images/Blackjack-Table.png') center top no-repeat;
+    min-height: 600px;
+    position: relative;
+}
+
+span#player-1-name {
+    left: 42px;
+    top: 294px;
+    transform: rotate(45deg);
+    -ms-transform: rotate(45deg); /* IE 9 */
+    -webkit-transform: rotate(45deg); /* Safari and Chrome */
+}
+
+span#player-2-name {
+    left: 250px;
+    top: 426px;
+    transform: rotate(20deg);
+    -ms-transform: rotate(20deg); /* IE 9 */
+    -webkit-transform: rotate(20deg); /* Safari and Chrome */
+}
+
+span#player-3-name {
+    left: 540px;
+    top: 426px;
+    transform: rotate(-20deg);
+    -ms-transform: rotate(-20deg); /* IE 9 */
+    -webkit-transform: rotate(-20deg); /* Safari and Chrome */
+}
+
+span#player-4-name {
+    left: 747px;
+    top: 295px;
+    transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg); /* IE 9 */
+    -webkit-transform: rotate(-45deg); /* Safari and Chrome */
+}
+
+div#player-1-cards {
+    left: 115px;
+    top: 205px;
+    transform: rotate(45deg);
+    -ms-transform: rotate(45deg); /* IE 9 */
+    -webkit-transform: rotate(45deg); /* Safari and Chrome */
+}
+
+div#player-2-cards {
+    left: 282px;
+    top: 312px;
+    transform: rotate(20deg);
+    -ms-transform: rotate(20deg); /* IE 9 */
+    -webkit-transform: rotate(20deg); /* Safari and Chrome */
+}
+
+div#player-3-cards {
+    left: 517px;
+    top: 311px;
+    transform: rotate(-20deg);
+    -ms-transform: rotate(-20deg); /* IE 9 */
+    -webkit-transform: rotate(-20deg); /* Safari and Chrome */
+}
+
+div#player-4-cards {
+    left: 681px;
+    top: 205px;
+    transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg); /* IE 9 */
+    -webkit-transform: rotate(-45deg); /* Safari and Chrome */
+}
+
+img.player-avatar {
+    position: absolute;
+    height: 60px;
+}
+
+img#player-1-avatar {
+    left: 51px;
+    top: 311px;
+    transform: rotate(45deg);
+    -ms-transform: rotate(45deg); /* IE 9 */
+    -webkit-transform: rotate(45deg); /* Safari and Chrome */
+}
+
+img#player-2-avatar {
+    left: 275px;
+    top: 453px;
+    transform: rotate(20deg);
+    -ms-transform: rotate(20deg); /* IE 9 */
+    -webkit-transform: rotate(20deg); /* Safari and Chrome */
+}
+
+img#player-3-avatar {
+    left: 606px;
+    top: 453px;
+    transform: rotate(-20deg);
+    -ms-transform: rotate(-20deg); /* IE 9 */
+    -webkit-transform: rotate(-20deg); /* Safari and Chrome */
+}
+
+img#player-4-avatar {
+    left: 829px;
+    top: 311px;
+    transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg); /* IE 9 */
+    -webkit-transform: rotate(-45deg); /* Safari and Chrome */
+}
+
+span.player-name {
+    position: absolute;
+    width: 150px;
+    font-weight: bold;
+    text-align: center;
+    overflow: hidden;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 1.2em;
+}
+
+div.cards {
+    position: absolute;
+    width: 140px;
+    text-align: center;
+}
+
+div.cards img {
+    height: 70px;
+    -webkit-box-shadow: -1px -1px 5px rgba(50, 50, 50, 0.75);
+    -moz-box-shadow:    -1px -1px 5px rgba(50, 50, 50, 0.75);
+    box-shadow:         -1px -1px 5px rgba(50, 50, 50, 0.75);
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+div.cards img:not(:nth-of-type(1)) {
+    margin-left: -42px;
+}
+
+div.player-score {
+    background-color: rgba(172, 172, 172, 0.61);
+    margin-top: -2.6em;
+    margin-bottom: 1em;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    text-align: center;
+    border: 1px solid #55df27;
+    width: 120px;
+    margin-left: 10px;
+    color: rgba(255, 255, 255, 0.78);
+}
+
+div.player-stats-section {
+    position: absolute;
+    margin-top: -900px;
+    width: 100%;
+}
+
+ul.player-stats {
+    width: 205px;
+    float: left;
+}
+
+ul.player-stats li.nav-header {
+    color: #AD0000;
+}
+
+div#discard-pile {
+    position: absolute;
+    left: 275px;
+    top: 25px;
+}
+
+div#deal-pile {
+    position: absolute;
+    top: 25px;
+    left: 615px;
+}
+
+div#deal-pile img {
+    float:left;
+    height: 70px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-box-shadow: -2px 2px 5px rgba(50, 50, 50, 0.25);
+    -moz-box-shadow:    -2px 2px 5px rgba(50, 50, 50, 0.25);
+    box-shadow:         -2px 2px 5px rgba(50, 50, 50, 0.25);
+}
+
+div#discard-pile img {
+    float:left;
+    height: 70px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-box-shadow: -1px -1px 1px rgba(50, 50, 50, 0.25);
+    -moz-box-shadow:    -1px -1px 1px rgba(50, 50, 50, 0.25);
+    box-shadow:         -1px -1px 1px rgba(50, 50, 50, 0.25);
+}
+
+div#discard-pile img:not(:first-of-type) {
+    margin-left: -48px;
+}
+
+div#discard-pile img:nth-of-type(1) {
+    transform: rotate(7deg);
+    -ms-transform: rotate(7deg); /* IE 9 */
+    -webkit-transform: rotate(7deg); /* Safari and Chrome */
+}
+
+div#discard-pile img:nth-of-type(2) {
+    transform: rotate(25deg);
+    -ms-transform: rotate(25deg); /* IE 9 */
+    -webkit-transform: rotate(25deg); /* Safari and Chrome */
+}
+
+div#discard-pile img:nth-of-type(3) {
+    transform: rotate(13deg);
+    -ms-transform: rotate(13deg); /* IE 9 */
+    -webkit-transform: rotate(13deg); /* Safari and Chrome */
+}
+
+div#discard-pile img:nth-of-type(4) {
+    transform: rotate(32deg);
+    -ms-transform: rotate(32deg); /* IE 9 */
+    -webkit-transform: rotate(32deg); /* Safari and Chrome */
+}
+
+div#discard-pile img:nth-of-type(5) {
+    transform: rotate(10deg);
+    -ms-transform: rotate(10deg); /* IE 9 */
+    -webkit-transform: rotate(10deg); /* Safari and Chrome */
+}
+
+div#discard-pile img:nth-of-type(6) {
+    transform: rotate(40deg);
+    -ms-transform: rotate(40deg); /* IE 9 */
+    -webkit-transform: rotate(40deg); /* Safari and Chrome */
+}
+
+div#discard-pile img:nth-of-type(7) {
+    transform: rotate(-7deg);
+    -ms-transform: rotate(-7deg); /* IE 9 */
+    -webkit-transform: rotate(-7deg); /* Safari and Chrome */
+}
+
+div#discard-pile img:nth-of-type(8) {
+    transform: rotate(-17deg);
+    -ms-transform: rotate(-17deg); /* IE 9 */
+    -webkit-transform: rotate(-17deg); /* Safari and Chrome */
+}
+
+div#discard-pile img:nth-of-type(9) {
+    transform: rotate(-22deg);
+    -ms-transform: rotate(-22deg); /* IE 9 */
+    -webkit-transform: rotate(-22deg); /* Safari and Chrome */
+}
+
+div#dealer-cards {
+    left: 400px;
+    top: 120px;
+}
+
+div.dealer-score {
+    background-color: rgba(172, 172, 172, 0.61);
+    margin-top: -2.6em;
+    margin-bottom: 1em;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    text-align: center;
+    border: 1px solid #55df27;
+    width: 200px;
+    margin-left: -30px;
+    color: rgba(255, 255, 255, 0.78);
+}
+
+div#active-seat-1 {
+    position: absolute;
+    background: url('/images/Active-Seat.png') center top no-repeat;
+    height: 90px;
+    width: 90px;
+    top: 296px;
+    left: 36px;
+}
+
+div#active-seat-2 {
+    position: absolute;
+    background: url("/images/Active-Seat.png") top left no-repeat;
+    height: 90px;
+    width: 90px;
+    top: 439px;
+    left: 260px;
+}
+
+div#active-seat-3 {
+    position: absolute;
+    background: url("/images/Active-Seat.png") top left no-repeat;
+    height: 90px;
+    width: 90px;
+    top: 439px;
+    left: 591px;
+}
+
+div#active-seat-4 {
+    position: absolute;
+    background: url("/images/Active-Seat.png") top left no-repeat;
+    height: 90px;
+    width: 90px;
+    top: 296px;
+    left: 814px;
+}
+

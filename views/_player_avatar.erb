@@ -1,0 +1,9 @@
+<% @game.active_players.each_with_index do |p, i| %>
+  <% if p.active %>
+    <% if p.gender.downcase == 'male' %>
+      <img src="/images/man.png" alt="Player avatar" class="player-avatar" id="player-<%= "#{i + 1}" %>-avatar"/>
+    <% else %>
+      <img src="/images/woman.png" alt="Player avatar" class="player-avatar" id="player-<%= "#{i + 1}" %>-avatar"/>
+    <% end %>
+  <% end %>
+<% end %>

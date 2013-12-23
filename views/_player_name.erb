@@ -1,0 +1,7 @@
+<% @game.active_players.each_with_index do |p, i| %>
+  <% if p.active %>
+    <span id="player-<%= "#{i + 1}" %>-name" class="player-name">
+      <%= p.name %>
+    </span>
+  <% end %>
+<% end %>

@@ -1,0 +1,15 @@
+<div class="dealer-score">
+  <% if @game.all_players_finished? %>
+    <% if @dealer.hand_is_blackjack? %>
+      <strong>Blackjack!</strong>
+    <% elsif @dealer.hand_is_bust? %>
+      <strong>Busted with <%= "#{@dealer.hand_value}" %></strong>
+    <% else %>
+      <%= "#{@dealer.hand_is_soft_or_hard.nil? ?
+              '' :
+              "#{@dealer.hand_is_soft_or_hard.capitalize} " } #{@dealer.hand_value}" %>
+    <% end %>
+  <% else %>
+    <%= "#{@dealer.card_showing.capitalize}" %>
+  <% end %>
+</div>

@@ -1,53 +1,64 @@
 <% if flash(:players).has_key?(:notice) %>
-    <div class="alert alert-info">
-      <%= flash(:players)[:notice] %>
-    </div>
+  <div class="alert alert-info">
+    <%= flash(:players)[:notice] %>
+  </div>
 <% end %>
 <% if flash(:players).has_key?(:error) %>
-    <div class="alert alert-error">
-      <%= flash(:players)[:error] %>
-    </div>
+  <div class="alert alert-error">
+    <%= flash(:players)[:error] %>
+  </div>
 <% end %>
 <% if ongoing_game_exists? %>
-    <div class="alert alert-error clearfix">
-      <p class="span12">Warning, there is already a game in progress.</p>
+  <div class="alert alert-error clearfix">
+    <p class="span12">Warning, there is already a game in progress.</p>
 
-      <p><a href="/game" class="btn btn-success span3">Click here to resume</a></p>
+    <p><a href="/game" class="btn btn-success span3">Click here to resume</a></p>
 
-      <p><a href="/new/game" class="btn btn-danger span3">Click here to clear the table</a></p>
-    </div>
+    <p><a href="/new/game" class="btn btn-danger span3">Click here to clear the table</a></p>
+  </div>
 <% else %>
-    <% if @players.count < Blackjack::SEATS_AT_TABLE %>
-        <div class="row">
-          <form action="/players/add" method="post">
-            <h4 class="span12">Hello, what is your name?</h4>
-
-            <p>&nbsp;</p>
-
-            <div class="input-append span4">
-              <input name="name" class="span3 player-name" type="text"
-                     placeholder="<%= "#{@players.count}" %> / <%= "#{Blackjack::SEATS_AT_TABLE}" %> seats taken">
-              <button type="submit" class="btn btn-warning"><i class='icon-user icon-white'></i> Sit down</button>
-            </div>
-          </form>
-        </div>
-    <% end %>
+  <% if @players.count < Blackjack::SEATS_AT_TABLE %>
     <div class="row">
-      <a href="/bet" type="button" class="span3 btn btn-success">Start game
-        <i class='icon-chevron-right icon-white'></i></a>
-    </div>
-    <p>&nbsp;</p>
-    <h5>There are currently <%= @players.count %> players at the table</h5>
-    <ol class="player-list">
-      <% @players.each do |p| %>
-          <li><%= p.name %></li>
-      <% end %>
-    </ol>
-    <% if @players.count > 0 %>
-        <div class="row">
-          <a href="/new/game" type="button" class="span3 btn btn-danger">
-            <i class='icon-remove icon-white'></i> Clear the table
-          </a>
+      <form action="/players/add" method="post">
+        <h4 class="span12">Hello, what is your name?</h4>
+
+        <p>&nbsp;</p>
+
+        <div class="input-append span4">
+          <input name="name" class="span3 player-name" type="text" autocomplete="off"
+                 placeholder="<%= "#{@players.count}" %> / <%= "#{Blackjack::SEATS_AT_TABLE}" %> seats taken">
+          <button type="submit" class="btn btn-warning"><i class='icon-user icon-white'></i> Sit down</button>
         </div>
+        <div class="row">&nbsp;</div>
+        <div class="btn-group span4" data-toggle="buttons">
+          <label class="btn btn-info">
+            <input type="radio" name="gender" value="male" style="margin-top: -3px;" checked="checked"> Male
+          </label>
+          <label class="btn btn-info">
+            <input type="radio" name="gender" value="female" style="margin-top: -3px"> Female
+          </label>
+        </div>
+      </form>
+    </div>
+  <% end %>
+  <div class="row">&nbsp;</div>
+
+  <div class="row">
+    <a href="/bet" type="button" class="span3 btn btn-success">Start game
+      <i class='icon-chevron-right icon-white'></i></a>
+  </div>
+  <p>&nbsp;</p>
+  <h5>There are currently <%= @players.count %> players at the table</h5>
+  <ol class="player-list">
+    <% @players.each do |p| %>
+      <li><%= p.name %></li>
     <% end %>
+  </ol>
+  <% if @players.count > 0 %>
+    <div class="row">
+      <a href="/new/game" type="button" class="span3 btn btn-danger">
+        <i class='icon-remove icon-white'></i> Clear the table
+      </a>
+    </div>
+  <% end %>
 <% end %>

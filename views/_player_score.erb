@@ -1,0 +1,16 @@
+<% player = @game.active_players[player_number] %>
+<% unless player.nil? %>
+<div class="player-score">
+  <% if player.hand_is_blackjack? %>
+    <strong>Blackjack!</strong>
+  <% elsif player.hand_is_bust? %>
+    <strong>Busted with <%= "#{player.hand_value}" %></strong>
+  <% elsif player.finished %>
+    <strong>Stayed at <%= "#{player.hand_value}" %></strong>
+  <% else %>
+    <strong><%= "#{player.hand_is_soft_or_hard.nil? ?
+            '' :
+            "#{player.hand_is_soft_or_hard.capitalize} " } #{player.hand_value}" %></strong>
+  <% end %>
+</div>
+<% end %>

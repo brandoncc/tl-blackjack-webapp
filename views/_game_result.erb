@@ -1,33 +1,68 @@
+<% message = '' %>
+
 <% if @game.round_over? %>
-    <div class="alert alert-info span<%= "#{CARD_WELL_SPAN_WIDTH}" %> pull-right" style="padding: 8px 19px 8px 19px;">
-      <h4 style="text-align: center">Game results</h4>
-      <hr/>
-      <ul class="unstyled">
-        <% if @dealer.hand_is_blackjack? %>
-            <li>The dealer got blackjack.</li>
-        <% elsif @dealer.hand_is_bust? %>
-            <li>The dealer busted with a score of <%= "#{@dealer.hand_value}" %>.</li>
-        <% else %>
-            <li>The dealer finished the hand with a score of <%= "#{@dealer.hand_value}" %>.</li>
-        <% end %>
-        <li></li>
-        <% @players.each do |p| %>
-            <% if p.bet > 0 %>
-                <li><%= p.build_hand_result_message %></li>
-            <% end %>
-        <% end %>
-      </ul>
-    </div>
+
+  <% message = '<h4 style="text-align: center">Game results</h4><hr /><ul class="unstyled">' %>
+  <% if @dealer.hand_is_blackjack? %>
+    <% message += '<li>The dealer got blackjack.</li>' %>
+  <% elsif @dealer.hand_is_bust? %>
+    <% message += "<li>The dealer busted with a score of #{@dealer.hand_value}.</li>" %>
+  <% else %>
+    <% message += "<li>The dealer finished the hand with a score of #{@dealer.hand_value}.</li>" %>
+  <% end %>
+  <% message += "<li>&nbsp;</li>" %>
+
+  <% @players.each do |p| %>
+    <% if p.bet > 0 %>
+      <% message += "<li>#{p.build_hand_result_message}</li>" %>
+    <% end %>
+  <% end %>
+  <% message += '</ul>' %>
 <% elsif @game.player_turn_over?(@current_player) && @dealer.card_count == 2 %>
-    <div class="alert alert-info span<%= "#{CARD_WELL_SPAN_WIDTH}" %> pull-right" style="padding: 8px 19px 8px 19px;">
-      <% if @current_player.hand_value > Blackjack::BLACKJACK_VALUE %>
-          Oops,
-          <%= "#{@current_player.name}" %> busted!
-      <% elsif @current_player.hand_value == Blackjack::BLACKJACK_VALUE && @current_player.card_count == 2 %>
-          Congratulations, <%= "#{@current_player.name}" %> got blackjack!
+  <% if @current_player.hand_value > Blackjack::BLACKJACK_VALUE %>
+    <% message += "Oops, #{@current_player.name} busted!" %>
+  <% elsif @current_player.hand_value == Blackjack::BLACKJACK_VALUE && @current_player.card_count == 2 %>
+    <% message += "Congratulations, #{@current_player.name} got blackjack!" %>
+  <% end %>
+<% end %>
+
+<% unless message == '' %>
+
+  <script>
+    bootbox.dialog("<%= message.gsub('"', '\\"') %>", [
+      <% if @game.round_over? %>
+      <% if @game.active_players.count > 0 %>
+      {
+        "label": "Restart game",
+        "class": "btn-danger",
+        "callback": function () {
+          window.location = '/reset_game';
+        }
+      },
+      {
+        "label": "Play another round",
+        "class": "btn-success",
+        "callback": function () {
+          window.location = '/new_round';
+        }
+      },
       <% else %>
-          <%= "#{@current_player.name}" %> stayed at
-          <%= "#{@current_player.hand_value}" %>.
+      {
+        "label": "Play a new game",
+        "class": "btn-success",
+        "callback": function () {
+          window.location = '/reset_game';
+        }
+      },
       <% end %>
-    </div>
+      <% else %>
+      {
+        "label": "Continue",
+        "class": "btn-success",
+        "callback": function () {
+        }
+      },
+      <% end %>
+    ]);
+  </script>
 <% end %>

@@ -1,14 +1,14 @@
-<ul class="nav nav-list player-stats">
-  <% @players.each do |p| %>
-      <% if p.active %>
-          <li class="nav-header"><%= p.name.upcase %>'S STATS</li>
-          <li class="disabled">Current bet: <strong>$<%= "#{p.bet}" %></strong></li>
-          <li class="disabled">Chips remaining: <strong>$<%= "#{p.chips - p.bet}" %></strong></li>
-          <li class="disabled">&nbsp;</li>
-          <li class="disabled">Wins: <strong><%= "#{p.wins_num}" %></strong></li>
-          <li class="disabled">Losses: <strong><%= "#{p.losses_num}" %></strong></li>
-          <li class="disabled">Pushes: <strong><%= "#{p.pushes_num}" %></strong></li>
-          <li class="disabled">&nbsp;</li>
-      <% end %>
+<% @game.active_players.each_with_index do |p, i| %>
+  <% if p.active %>
+    <ul class="nav nav-list span3 pull-left player-stats">
+      <li class="nav-header"><%= p.name.upcase %>'S STATS</li>
+      <li class="disabled">Current bet: <strong>$<%= "#{p.bet}" %></strong></li>
+      <li class="disabled">Chips remaining: <strong>$<%= "#{p.chips - p.bet}" %></strong></li>
+      <li class="disabled">&nbsp;</li>
+      <li class="disabled">Wins: <strong><%= "#{p.wins_num}" %></strong></li>
+      <li class="disabled">Losses: <strong><%= "#{p.losses_num}" %></strong></li>
+      <li class="disabled">Pushes: <strong><%= "#{p.pushes_num}" %></strong></li>
+      <li class="disabled">&nbsp;</li>
+    </ul>
   <% end %>
-</ul>
+<% end %>

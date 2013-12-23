@@ -1,13 +1,13 @@
 class Blackjack
   attr_accessor :players, :dealer, :deck, :winnings_processed, :current_player_index, :processed_last_players_actions,
-                :original_player_names
+                :original_player_names, :animation_has_been_shown
 
   INITIAL_CHIPS_VALUE  = 250
   DEALER_STAY_MINIMUM  = 17
   BLACKJACK_VALUE      = 21
   BLACKJACK_PAYOUT     = 3.0 / 2.0
   WIN_PAYOUT           = 1.0
-  SEATS_AT_TABLE       = 6
+  SEATS_AT_TABLE       = 4
 
   # win codes
   PLAYER_HAS_BLACKJACK = 1001
@@ -27,6 +27,7 @@ class Blackjack
     @current_player_index          = 0
     @processed_last_players_action = false
     @original_player_names         = []
+    @animation_has_been_shown      = false
   end
 
   def deal_cards
@@ -113,8 +114,12 @@ class Blackjack
 
   def round_over?
     (player_turn_over?(@current_player) && next_player.nil? && dealer_turn_over?) ||
-        (@players.count == 1 && @players.first.hand_is_blackjack?) ||
-        (@players.count == 1 && @players.first.hand_is_bust?  )
+        (players_count == 1 && @players.first.hand_is_blackjack?) ||
+        (players_count == 1 && @players.first.hand_is_bust?)
+  end
+
+  def players_count
+    @players.count
   end
 
   def dealer_turn_over?
@@ -143,18 +148,19 @@ class Blackjack
     new_round
 
     @players = []
-    @original_player_names.each { |n| add_player(n) }
+    @original_player_names.each { |p| add_player(p[:name], p[:gender]) }
   end
 
-  def add_player(p)
-    player      = Player.new
-    player.name = p
+  def add_player(p, g)
+    player        = Player.new
+    player.name   = p
+    player.gender = g
 
     @players << player
   end
 
-  def retain_player_name(p)
-    @original_player_names << p
+  def retain_player_name(p, g)
+    @original_player_names << { name: p, gender: g }
   end
 
   def normalize_player_name(name)
@@ -170,7 +176,7 @@ class Blackjack
   end
 
   def current_player
-    @players[@current_player_index]
+    players[@current_player_index]
   end
 
   def all_players_finished?
@@ -191,5 +197,9 @@ class Blackjack
 
   def all_players_had_push
     @players.select { |p| p.last_hand_result == GAME_IS_PUSH }.count == @players.count
+  end
+
+  def active_players
+    @players.select { |p| p.chips > 0 }
   end
 end

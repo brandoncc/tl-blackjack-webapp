@@ -1,25 +1,57 @@
-<% PLAYER_CARD_WIDTH_DURING_PLAY = 2 %>
-<% PLAYER_CARD_WIDTH_AFTER_PLAY = 1 %>
-<% CARD_WELL_SPAN_WIDTH = 6 # MUST BE ODD!!!   %>
-
-
-<div class="span12">
-  <div class="row">
-    <div class="span3 affix">
-      <p><%= erb :'_actions' %></p>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>New UI</title>
+  <link rel="stylesheet" href="/application.css"/>
+  <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+  <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+  <script src="/application.js"></script>
+  <script src="/bootbox.min.js"></script>
+</head>
+<body>
+<div class="container">
+  <div id="table">
+    <div class="well lower-opacity pull-right actions-list" style="padding: 8px 14px;">
+      <%= erb :'_actions' %>
     </div>
-    <div class="span6 offset3">
-      <%= erb :'_game_result' %>
-      <% if @game.player_turn_over?(@current_player) && @game.next_player.nil? %>
-          <%= erb :'_dealer_cards' %>
-          <%= erb :'_player_cards' %>
-      <% else %>
-          <%= erb :'_player_cards' %>
-          <%= erb :'_dealer_cards' %>
-      <% end %>
+    <div id="discard-pile">
+      <img src="/images/cards/cover.jpg" alt=""/>
+      <img src="/images/cards/cover.jpg" alt=""/>
+      <img src="/images/cards/cover.jpg" alt=""/>
+      <img src="/images/cards/cover.jpg" alt=""/>
+      <img src="/images/cards/cover.jpg" alt=""/>
+      <img src="/images/cards/cover.jpg" alt=""/>
+      <img src="/images/cards/cover.jpg" alt=""/>
+      <img src="/images/cards/cover.jpg" alt=""/>
+      <img src="/images/cards/cover.jpg" alt=""/>
     </div>
-    <div class="span3">
-      <p><%= erb :'_player_stats' %></p>
+    <div id="deal-pile">
+      <img src="/images/cards/cover.jpg" style="" alt=""/>
+      <img src="/images/cards/cover.jpg" style="margin-left: -46px; margin-top: -1px;" alt=""/>
+      <img src="/images/cards/cover.jpg" style="margin-left: -46px; margin-top: -2px;" alt=""/>
+      <img src="/images/cards/cover.jpg" style="margin-left: -47px; margin-top: -3px;" alt=""/>
+      <img src="/images/cards/cover.jpg" style="margin-left: -47px; margin-top: -4px;" alt=""/>
+      <img src="/images/cards/cover.jpg" style="margin-left: -46px; margin-top: -5px;" alt=""/>
+      <img src="/images/cards/cover.jpg" style="margin-left: -46px; margin-top: -6px;" alt=""/>
+    </div>
+    <%= erb :'_dealer_cards' %>
+
+    <%= erb :'_player_cards' %>
+    <%= erb :'_player_name' %>
+    <%= erb :'_active_seat' %>
+    <%= erb :'_player_avatar' %>
+
+    <div class="row player-stats-section">
+      <div class="span12">
+        <%= erb :'_player_stats' %>
+      </div>
     </div>
   </div>
 </div>
+<%= erb :'_game_result' %>
+<script>animateGame(<%= !@game.animation_has_been_shown %>)</script>
+<% @game.animation_has_been_shown = true %>
+</body>
+</html>

@@ -1,47 +1,35 @@
-<% if @game.round_over? %>
-    <ul class="nav nav-list actions-list" style="padding: 8px 14px;">
-      <li class="nav-header">GAME ACTIONS</li>
-      <% if @players.select { |p| p.chips > 0 }.count > 0 %>
-          <li><a href="/new_round"><i class="icon-play"></i> Play another round</a></li>
-          <li><a href="/reset_game"><i class="icon-off"></i> Restart game</a></li>
-      <% else %>
-          <li><a href="/reset_game"><i class="icon-play"></i> Play a new game</a></li>
-      <% end %>
-    </ul>
-<% else %>
-    <% if @game.player_turn_over?(@current_player) %>
-        <% if @game.next_player.nil? %>
-            <ul class="nav nav-list actions-list">
-              <li><h5>Dealer's turn</h5></li>
-              <li class="divider"></li>
+<ul class="nav nav-list actions-list">
 
-              <li class="nav-header">DEALER ACTIONS</li>
-              <li><a href="/actions/hit/dealer"><i class="icon-thumbs-up"></i> Hit dealer's hand</a></li>
-              <li class="divider"></li>
-              <li>&nbsp;</li>
-              <li><%= erb :'_dealer_status' %></li>
-              <li>&nbsp;</li>
-              <%= erb :'_player_status' %>
-            </ul>
-        <% else %>
-            <ul class="nav nav-list actions-list" style="padding: 8px 14px;">
-              <li class="nav-header">GAME ACTIONS</li>
-              <li>
-                <a href="/players/next"><i class="icon-play"></i> Start <%= "#{@game.next_player.name}" %>'s turn</a>
-              </li>
-            </ul>
-        <% end %>
+  <% if @game.round_over? %>
+    <li class="nav-header">GAME ACTIONS</li>
+    <% if @game.active_players.count > 0 %>
+      <li><a href="/new_round"><i class="icon-play"></i> Play another round</a></li>
+      <li><a href="/reset_game"><i class="icon-off"></i> Restart game</a></li>
     <% else %>
-        <ul class="nav nav-list actions-list">
-          <li><h5><%= @current_player.name %>'s turn</h5></li>
-          <li class="divider"></li>
-          <li class="nav-header">USER ACTIONS</li>
-          <li><a href="/actions/hit/player"><i class="icon-thumbs-up"></i> Hit</a></li>
-          <li><a href="/actions/stay/player"><i class="icon-thumbs-down"></i> Stay</a></li>
-          <li class="divider"></li>
-          <li><%= erb :'_dealer_status' %></li>
-          <li>&nbsp;</li>
-          <li><%= erb :'_player_status' %></li>
-        </ul>
+      <li><a href="/reset_game"><i class="icon-play"></i> Play a new game</a></li>
     <% end %>
-<% end %>
+  <% else %>
+    <% if @game.player_turn_over?(@current_player) %>
+      <% if @game.next_player.nil? %>
+        <li><h5>Dealer's turn</h5></li>
+        <li class="divider"></li>
+
+        <li class="nav-header">DEALER ACTIONS</li>
+        <li><a href="/actions/hit/dealer"><i class="icon-thumbs-up"></i> Hit dealer's hand</a></li>
+      <% else %>
+        <li class="nav-header">GAME ACTIONS</li>
+        <li>
+          <a href="/players/next"><i class="icon-play"></i> Start <%= "#{@game.next_player.name}" %>'s turn</a>
+        </li>
+      <% end %>
+    <% else %>
+      <li><h5><%= @current_player.name %>'s turn</h5></li>
+      <li class="divider"></li>
+      <li class="nav-header">USER ACTIONS</li>
+      <li><a href="/actions/hit/player"><i class="icon-thumbs-up"></i> Hit</a></li>
+      <li><a href="/actions/stay/player"><i class="icon-thumbs-down"></i> Stay</a></li>
+    <% end %>
+  <% end %>
+  <li class="divider">&nbsp;</li>
+  <li><a href="/"><i class="icon-off"></i> Exit game</a></li>
+</ul>

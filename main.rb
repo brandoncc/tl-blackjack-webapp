@@ -101,8 +101,8 @@ def setup_new_game
 end
 
 def setup_new_player
-  @game.add_player(params[:name].strip)
-  @game.retain_player_name(params[:name].strip)
+  @game.add_player(params[:name].strip, params[:gender].strip)
+  @game.retain_player_name(params[:name].strip, params[:gender].strip)
 end
 
 def handle_expired_session
@@ -184,7 +184,7 @@ get '/game' do
     save_game_state
   end
 
-  erb :game
+  erb :game, layout: false
 end
 
 get '/new_round' do
