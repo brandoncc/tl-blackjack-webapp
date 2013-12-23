@@ -14,6 +14,6 @@ class Dealer
   end
 
   def card_showing
-    "showing #{cards.first}"
+    "showing #{cards.last}"
   end
 end
