@@ -184,7 +184,7 @@ get '/game' do
     save_game_state
   end
 
-  erb :game, layout: false
+  erb :game, layout: :layout_without_navbar
 end
 
 get '/new_round' do
