@@ -45,13 +45,8 @@ helpers do
   end
 
   def ongoing_game_exists?
-    exists = false
-    if !(@game.nil? || @game.all_players_out?)
-      exists ||= @dealer.cards.count > 0
-      exists ||= ongoing_hand_exists?
-    end
-
-    exists
+    return false if @game.nil?
+    @game.game_in_progress
   end
 
   def ongoing_hand_exists?
@@ -153,6 +148,7 @@ post '/bet' do
       params[:bet].to_i <= @current_player.chips
     @current_player.bet = params[:bet].to_i
 
+    @game.game_in_progress = true
     save_game_state
   else
     if !(params[:bet].to_s =~ /\A[-+]?\d*\.?\d+\z/)

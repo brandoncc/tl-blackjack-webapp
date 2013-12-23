@@ -1,6 +1,6 @@
 class Blackjack
   attr_accessor :players, :dealer, :deck, :winnings_processed, :current_player_index, :processed_last_players_actions,
-                :original_player_names, :animation_has_been_shown
+                :original_player_names, :animation_has_been_shown, :game_in_progress
 
   INITIAL_CHIPS_VALUE  = 250
   DEALER_STAY_MINIMUM  = 17
@@ -28,6 +28,7 @@ class Blackjack
     @processed_last_players_action = false
     @original_player_names         = []
     @animation_has_been_shown      = false
+    @game_in_progress              = false
   end
 
   def deal_cards
@@ -110,6 +111,7 @@ class Blackjack
     current_player.add_loss
 
     current_player.active = false if current_player.chips == 0
+    @game_in_progress = false if active_players.count == 0
   end
 
   def round_over?
