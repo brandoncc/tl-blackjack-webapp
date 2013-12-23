@@ -6,7 +6,7 @@
       <img src="<%= "#{card.image}" %>" alt=""/>
     <% end %>
   <% else %>
-    <img src="<%= "#{@dealer.first_card.image}" %>"/>
     <img src="/images/cards/cover.jpg"/>
+    <img src="<%= "#{@dealer.last_card.image}" %>"/>
   <% end %>
 </div>

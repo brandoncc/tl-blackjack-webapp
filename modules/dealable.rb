@@ -7,6 +7,10 @@ module Dealable
     @cards.first
   end
 
+  def last_card
+    @cards.last
+  end
+
   def hand_is_blackjack?
     @cards.count == 2 && hand_value == Blackjack::BLACKJACK_VALUE
   end
