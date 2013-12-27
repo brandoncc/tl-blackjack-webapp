@@ -2,7 +2,8 @@
 <% if @game.game_in_progress %>
   <% if @game.round_over? %>
     <% display_result = true %>
-    <div id="resultModal" data-backdrop="static" data-keyboard="false" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel" aria-hidden="true">
+    <div id="resultModal" data-backdrop="static" data-keyboard="false" class="modal hide"
+         tabindex="-1" role="dialog" aria-labelledby="resultModalLabel" aria-hidden="true">
       <div class="modal-header">
         <h3 id="resultModalLabel">Game results</h3>
       </div>
@@ -37,7 +38,8 @@
     </div>
     <script>showResults();</script>
   <% elsif @game.player_turn_over?(@current_player) && @dealer.card_count == 2 %>
-    <div id="resultModal" data-backdrop="static" data-keyboard="false" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel" aria-hidden="true">
+    <div id="resultModal" data-backdrop="static" data-keyboard="false" class="modal hide" tabindex="-1" role="dialog"
+         aria-labelledby="resultModalLabel" aria-hidden="true">
       <!--<div class="modal-header">-->
       <!--<h3 id="resultModalLabel">Game results</h3>-->
       <!--</div>-->
@@ -51,7 +53,9 @@
         <% end %>
       </div>
       <div class="modal-footer">
-        <button type="submit" id="continue-game" class="btn btn-success" onclick="$('div#resultModal').modal('hide');">Continue</button>
+        <button type="submit" id="continue-game" class="btn btn-success" onclick="$('div#resultModal').modal('hide');">
+          Continue
+        </button>
       </div>
     </div>
     <% if display_result == true %>
