@@ -1,0 +1,30 @@
+<div id="betModal" data-backdrop="static" data-keyboard="false" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="betModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <h3 id="betModalLabel"><%= next_player_to_bet.name %>, how much would you like to bet on this hand?</h3>
+  </div>
+  <div class="modal-body">
+    <% if flash(:bet).has_key?(:error) %>
+      <div class="alert alert-error">
+        <%= flash(:bet)[:error] %>
+      </div>
+    <% end %>
+    <form method="post" id="bet-form">
+
+      <p><em>You currently have $<%= next_player_to_bet.chips %> available to bet.</em></p>
+
+      <p>&nbsp;</p>
+
+      <p>
+
+      <div class="input-prepend">
+        <span class="add-on">$</span>
+        <input type="text" name="bet" placeholder="example: 10" id="bet-amount" autocomplete="off"><br/>
+      </div>
+      </p>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" id="place-bet" class="btn btn-success" onclick="placeBet();">Place Bet</button>
+  </div>
+</div>
+<script>askForBets();</script>

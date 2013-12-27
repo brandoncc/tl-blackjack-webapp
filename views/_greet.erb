@@ -1,0 +1,65 @@
+<% if @players.count >= Blackjack::SEATS_AT_TABLE
+     flash(:players).now[:notice] = "All #{Blackjack::SEATS_AT_TABLE} seats are filled. Nothing left to do but start the game!"
+   end %>
+
+<div id="greetModal" data-backdrop="static" data-keyboard="false" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="greetModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <h3 id="greetModalLabel">Hello, what is your name?</h3>
+  </div>
+  <div class="modal-body">
+    <% if flash(:players).has_key?(:notice) %>
+      <div class="alert alert-info">
+        <%= flash(:players)[:notice] %>
+      </div>
+    <% end %>
+    <% if flash(:players).has_key?(:error) %>
+      <div class="alert alert-error">
+        <%= flash(:players)[:error] %>
+      </div>
+    <% end %>
+    <% if @players.count < Blackjack::SEATS_AT_TABLE %>
+      <div class="row">
+        <form id="greet-form" method="post">
+          <div class="span4">
+            <input name="name" class="span3 player-name" type="text" autocomplete="off"
+                   placeholder="<%= "#{@players.count}" %> / <%= "#{Blackjack::SEATS_AT_TABLE}" %> seats taken">
+
+          </div>
+          <div class="btn-group span4" data-toggle="buttons" id="player-gender">
+            <label class="btn btn-info">
+              <input type="radio" name="gender" value="male" style="margin-top: -3px;" checked="checked"> Male
+            </label>
+            <label class="btn btn-info">
+              <input type="radio" name="gender" value="female" style="margin-top: -3px"> Female
+            </label>
+          </div>
+        </form>
+      </div>
+    <% end %>
+    <p>&nbsp;</p>
+    <h5>There are currently <%= @players.count %> players at the table</h5>
+    <ol class="player-list">
+      <% @players.each do |p| %>
+        <li><%= p.name %></li>
+      <% end %>
+    </ol>
+  </div>
+  <div class="modal-footer">
+    <% if @players.count > 0 %>
+      <button class="btn btn-danger" id="clear-table" onclick="clearTheTable();"><i class='icon-remove icon-white'></i>
+        Clear the table
+      </button>
+
+      <button type="submit" class="btn btn-success" id="start-game" onclick="startGame();">Start game
+        <i class='icon-chevron-right icon-white'></i></button>
+    <% end %>
+    <button class="btn btn-warning" id="sit-down" style="display: none;"
+            onclick="addPlayer(
+                    $('form#greet-form input.player-name ').val(),
+                    $('form#greet-form div#player-gender input[type=\'radio\']:checked').val()
+                    );">
+      <i class='icon-user icon-white'></i> Sit down
+    </button>
+  </div>
+</div>
+<script>greetPlayer();</script>

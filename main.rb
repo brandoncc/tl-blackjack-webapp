@@ -13,28 +13,6 @@ end
 
 use Rack::Session::Pool, :expire_after => 60 * 60 * 24
 
-# Plan of action:
-# 1. Ask player name ('/')
-# 2. Get player bet ('/bet')
-# 3. Start game ('/game')
-# 4. Show cards ('/game')
-# 5. Deal cards ('/game')
-# 6. Player turn ('/game')
-#   a. Ask for user action until blackjack/bust/21/stay ('/game')
-#   b. If blackjack/bust, end game, awarding/taking winnings/losses ('/game')
-#   c. Notify player of game result ('/result') ==> decided to display results inline on '/game'
-# 7. Dealer turn ('/game')
-#   a. Check for blackjack ('/game')
-#   b. If blackjack, end game and take lost credits from player ('/game')
-#   c. If not, make dealer hit until score > 17 or score < 21 ('/game')
-# 8. Compare scores ('/game')
-#   a. If player score > dealer score, award winnings ('/game')
-#   b. If dealer score > player score, lose bet ('/game')
-#   c. If player score == dealer score, bet stays on the table ('/game')
-# 9. Show game result ('/result'), with play again button ==> decided to display results inline on '/game'
-# 10. If user plays again, set chips to nil and ask for new bet. If chips are not set to nil, that is a potential bug
-#     where the user could just point the browser back to /game and it would use the same bet value as the last hand.
-
 helpers do
   def get_current_player
     unless @game.nil?
@@ -44,34 +22,19 @@ helpers do
     end
   end
 
-  def ongoing_game_exists?
-    return false if @game.nil?
-    @game.game_in_progress
-  end
-
-  def ongoing_hand_exists?
-    exists = false
-
-    unless @game.nil? || @players.count == 0
-      return false if @players.last.bet.nil? || @players.last.bet.to_i == 0 ||
-          !(@players.last.bet.to_s =~ /\A[-+]?\d*\.?\d+\z/)
-      exists ||= !(@game.all_players_finished? || @game.dealer_turn_over?)
-    end
-
-    return exists
-  end
-
   def players_have_cards?
     @players.last.cards.count > 0
+  end
+
+  def next_player_to_bet
+    @players.select { |p| p.active && (p.bet.nil? || p.bet == 0) }.first
   end
 end
 
 def save_game_state
   session[:current_game] = @game
-end
 
-def reset_game_state
-  session[:current_game] = nil
+  get_game_state
 end
 
 def get_game_state
@@ -83,10 +46,13 @@ def get_game_state
   else
     setup_new_game
   end
-end
 
-def next_player_to_bet
-  @players.select { |p| p.active && (p.bet.nil? || p.bet == 0) }.first
+  def check_for_end_of_round
+    if @game.game_in_progress && @game.round_over? && !@game.winnings_processed then
+      @game.process_winnings
+      save_game_state
+    end
+  end
 end
 
 def setup_new_game
@@ -100,90 +66,53 @@ def setup_new_player
   @game.retain_player_name(params[:name].strip, params[:gender].strip)
 end
 
-def handle_expired_session
-  redirect to('/') if @game.nil? || @game.players.count == 0
+def refresh_game
+  get_current_player
+  check_for_end_of_round
+  erb :game, layout: false
+end
+
+def tell_dealer_to_deal_cards
+  @game.deal_hand unless players_have_cards?
 end
 
 before do
   get_game_state
-end
-
-# do not execute for /
-before /^(?!\/$)/ do
-  get_current_player
-end
-
-# do not execute for / or /players/add
-before /^(?!\/$|\/players\/add$)/ do
-  handle_expired_session
-end
-
-before '/bet' do
-  @current_player = next_player_to_bet
-end
-
-before '/game' do
-  redirect to('/bet') unless next_player_to_bet.nil?
   get_current_player
 end
 
 get '/' do
-  if @players.count == Blackjack::SEATS_AT_TABLE
-    flash(:players).now[:notice] = "All #{Blackjack::SEATS_AT_TABLE} seats are filled. Nothing left to do but start the game!"
-  end
-
-  redirect to('/new/game') if @game.all_players_out? && @players.count > 0
-
-  erb :greet
-end
-
-get '/bet' do
-  redirect to('/game') if @game.all_players_had_push
-
-  erb :bet
+  save_game_state
+  get_current_player
+  erb :game
 end
 
 post '/bet' do
   if params.has_key?('bet') && params[:bet].to_s =~ /\A[-+]?\d*\.?\d+\z/ && params[:bet].to_i > 0 &&
-      params[:bet].to_i <= @current_player.chips
-    @current_player.bet = params[:bet].to_i
+      params[:bet].to_i <= next_player_to_bet.chips
+    next_player_to_bet.bet = params[:bet].to_i
 
-    @game.game_in_progress = true
     save_game_state
   else
     if !(params[:bet].to_s =~ /\A[-+]?\d*\.?\d+\z/)
-      flash(:bet)[:error] = "Sorry, <strong>#{params[:bet]}</strong> is not a valid number."
+      flash(:bet).now[:error] = "Sorry, <strong>#{params[:bet]}</strong> is not a valid number."
     elsif params[:bet].to_s =~ /\A[-+]?\d*\.?\d+\z/ && params[:bet].to_i > 0 &&
-        params[:bet].to_i > @current_player.chips
-      flash(:bet)[:error] =
+        params[:bet].to_i > next_player_to_bet.chips
+      flash(:bet).now[:error] =
           "Sorry, you cannot bet <strong>$#{params[:bet]}</strong>. " +
-          "You currently have <strong>$#{@current_player.chips}</strong>."
+          "You currently have <strong>$#{next_player_to_bet.chips}</strong>."
     end
   end
 
-  if next_player_to_bet.nil?
-    redirect to('/game')
-  else
-    redirect to('/bet')
-  end
+  tell_dealer_to_deal_cards if next_player_to_bet.nil?
+
+  refresh_game
 end
 
-get '/game' do
-  handle_expired_session
-
-  redirect to('/players/cleanup') unless @players.select { |p| !p.active }.count == 0
-
-  @game.deal_hand unless players_have_cards?
-
-  if @game.round_over? && !@game.winnings_processed then
-    @game.process_winnings
-    save_game_state
+post '/new_round' do
+  if @game.game_in_progress
+    @game.cleanup_inactive_players unless @players.select { |p| !p.active }.count == 0
   end
-
-  erb :game, layout: :layout_without_navbar
-end
-
-get '/new_round' do
   push_bets = []
   @players.each do |p|
     if p.last_hand_result == Blackjack::GAME_IS_PUSH
@@ -195,32 +124,33 @@ get '/new_round' do
 
   @game.new_round
   @players.each_with_index { |p, i| p.bet = push_bets[i] unless push_bets[i].nil? }
+  tell_dealer_to_deal_cards if next_player_to_bet.nil?
   save_game_state
-  redirect to('/bet')
+  refresh_game
 end
 
-get '/reset_game' do
+post '/game/reset' do
   @game.reset_game
   save_game_state
-  redirect to('/bet')
+  refresh_game
 end
 
-get '/actions/hit/:who' do
+post '/actions/hit/:who' do
   case params[:who]
   when 'player' then @current_player.give_card(@deck.deal_one_card)
   when 'dealer' then @dealer.give_card(@deck.deal_one_card)
   end
   save_game_state
-  redirect to('/game')
+  refresh_game
 end
 
-get '/actions/stay/:who' do
+post '/actions/stay/:who' do
   case params[:who]
   when 'player' then @current_player.finished = true
   when 'dealer' then @dealer.finished = true
   end
   save_game_state
-  redirect to('/game')
+  refresh_game
 end
 
 post '/players/add' do
@@ -228,19 +158,20 @@ post '/players/add' do
     unless @game.player_exists?(params[:name].strip)
       setup_new_player
     else
-      flash(:players)[:error] = "It looks like <strong>#{params[:name].strip}</strong> is already sitting at the table."
+      flash(:players).now[:error] = "It looks like <strong>#{params[:name].strip}</strong> is already sitting at the table."
     end
   else
-    flash(:players)[:error] = 'You must enter a name for your player.'
+    flash(:players).now[:error] = 'You must enter a name for your player.'
   end
 
   save_game_state
-  redirect to('/')
+  refresh_game
 end
 
-get '/players/next' do
+post '/players/next' do
   @game.start_next_players_turn
-  redirect to('/game')
+  save_game_state
+  refresh_game
 end
 
 get '/players/cleanup' do
@@ -249,8 +180,14 @@ get '/players/cleanup' do
   redirect to('/game')
 end
 
-get '/new/game' do
+post '/game/new' do
   setup_new_game
   save_game_state
-  redirect to('/')
+  refresh_game
+end
+
+post '/game/start' do
+  @game.game_in_progress = true
+  save_game_state
+  refresh_game
 end

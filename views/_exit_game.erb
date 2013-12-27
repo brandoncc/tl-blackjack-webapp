@@ -1,0 +1,18 @@
+<div id="exitModal" data-backdrop="static" data-keyboard="false" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="exitModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <h3 id="exitModalLabel">Are you sure?</h3>
+  </div>
+  <div class="modal-body">
+    <p><em>Are you sure you want to exit the current game? </em></p>
+
+    <p>You can also choose to keep the current " +
+      "players and reset their chips and stats.</p>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-danger" onclick="clearTheTable();"><i class='icon-remove icon-white'></i>
+      Clear the table</button>
+    <button class="btn btn-primary" onclick="restartGame();"><i class="icon-repeat icon-white"></i> Reset game</button>
+    <button class="btn" onclick="$('div#exitModal').modal('hide');">Cancel</button>
+  </div>
+</div>

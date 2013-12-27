@@ -1,68 +1,61 @@
-<% message = '' %>
-
-<% if @game.round_over? %>
-
-  <% message = '<h4 style="text-align: center">Game results</h4><hr /><ul class="unstyled">' %>
-  <% if @dealer.hand_is_blackjack? %>
-    <% message += '<li>The dealer got blackjack.</li>' %>
-  <% elsif @dealer.hand_is_bust? %>
-    <% message += "<li>The dealer busted with a score of #{@dealer.hand_value}.</li>" %>
-  <% else %>
-    <% message += "<li>The dealer finished the hand with a score of #{@dealer.hand_value}.</li>" %>
-  <% end %>
-  <% message += "<li>&nbsp;</li>" %>
-
-  <% @players.each do |p| %>
-    <% if p.bet > 0 %>
-      <% message += "<li>#{p.build_hand_result_message}</li>" %>
+<% display_result = false %>
+<% if @game.game_in_progress %>
+  <% if @game.round_over? %>
+    <% display_result = true %>
+    <div id="resultModal" data-backdrop="static" data-keyboard="false" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <h3 id="resultModalLabel">Game results</h3>
+      </div>
+      <div class="modal-body">
+        <ul class="unstyled">
+          <% if @dealer.hand_is_blackjack? %>
+            <li>The dealer got blackjack.</li>
+          <% elsif @dealer.hand_is_bust? %>
+            <li>The dealer busted with a score of <%= "#{@dealer.hand_value}" %>.</li>
+          <% else %>
+            <li>The dealer finished the hand with a score of <%= "#{@dealer.hand_value}" %>.</li>
+          <% end %>
+          <li>&nbsp;</li>
+          <% @players.each do |p| %>
+            <% if p.bet > 0 %>
+              <li><%= "#{p.build_hand_result_message}" %></li>
+            <% end %>
+          <% end %>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <% if @game.active_players.count > 0 %>
+          <button type="submit" id="restart-game" class="btn btn-danger" onclick="restartGame();">Restart game</button>
+          <button type="submit" id="play-another-round" class="btn btn-success" onclick="playAnotherRound();">
+            Play another round
+          </button>
+        <% else %>
+          <button type="submit" id="restartGame" class="btn btn-success" onclick="restartGame();">Play a new game
+          </button>
+        <% end %>
+      </div>
+    </div>
+    <script>showResults();</script>
+  <% elsif @game.player_turn_over?(@current_player) && @dealer.card_count == 2 %>
+    <div id="resultModal" data-backdrop="static" data-keyboard="false" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel" aria-hidden="true">
+      <!--<div class="modal-header">-->
+      <!--<h3 id="resultModalLabel">Game results</h3>-->
+      <!--</div>-->
+      <div class="modal-body">
+        <% if @current_player.hand_value > Blackjack::BLACKJACK_VALUE %>
+          <% display_result = true %>
+          Oops, <%= "#{@current_player.name}" %> busted.
+        <% elsif @current_player.hand_value == Blackjack::BLACKJACK_VALUE && @current_player.card_count == 2 %>
+          <% display_result = true %>
+          Congratulations, <%= "#{@current_player.name}" %> got blackjack!
+        <% end %>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" id="continue-game" class="btn btn-success" onclick="$('div#resultModal').modal('hide');">Continue</button>
+      </div>
+    </div>
+    <% if display_result == true %>
+      <script>showResults();</script>
     <% end %>
   <% end %>
-  <% message += '</ul>' %>
-<% elsif @game.player_turn_over?(@current_player) && @dealer.card_count == 2 %>
-  <% if @current_player.hand_value > Blackjack::BLACKJACK_VALUE %>
-    <% message += "Oops, #{@current_player.name} busted!" %>
-  <% elsif @current_player.hand_value == Blackjack::BLACKJACK_VALUE && @current_player.card_count == 2 %>
-    <% message += "Congratulations, #{@current_player.name} got blackjack!" %>
-  <% end %>
-<% end %>
-
-<% unless message == '' %>
-
-  <script>
-    bootbox.dialog("<%= message.gsub('"', '\\"') %>", [
-      <% if @game.round_over? %>
-      <% if @game.active_players.count > 0 %>
-      {
-        "label": "Restart game",
-        "class": "btn-danger",
-        "callback": function () {
-          window.location = '/reset_game';
-        }
-      },
-      {
-        "label": "Play another round",
-        "class": "btn-success",
-        "callback": function () {
-          window.location = '/new_round';
-        }
-      },
-      <% else %>
-      {
-        "label": "Play a new game",
-        "class": "btn-success",
-        "callback": function () {
-          window.location = '/reset_game';
-        }
-      },
-      <% end %>
-      <% else %>
-      {
-        "label": "Continue",
-        "class": "btn-success",
-        "callback": function () {
-        }
-      },
-      <% end %>
-    ]);
-  </script>
 <% end %>

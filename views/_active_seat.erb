@@ -1,3 +1,13 @@
-<% unless @game.all_players_finished? %>
-  <div id="active-seat-<%= "#{@game.current_player_index + 1}" %>">&nbsp;</div>
+<% if @game.game_in_progress %>
+  <% if next_player_to_bet.nil? %>
+    <% unless @game.all_players_finished? %>
+      <div id="active-seat-<%= "#{@game.current_player_index + 1}" %>">&nbsp;</div>
+    <% end %>
+  <% else %>
+    <% @game.active_players.each_with_index do |p, i| %>
+      <% if p === next_player_to_bet %>
+        <div id="active-seat-<%= "#{i + 1}" %>">&nbsp;</div>
+      <% end %>
+    <% end %>
+  <% end %>
 <% end %>

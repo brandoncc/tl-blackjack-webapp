@@ -194,6 +194,10 @@ class Blackjack
   end
 
   def cleanup_inactive_players
+    @players.each do |p|
+      p.discard_cards(@deck) if !p.nil? && !p.active
+    end
+
     @players.delete_if { |p| !p.nil? && !p.active }
   end
 

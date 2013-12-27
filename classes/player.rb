@@ -51,7 +51,7 @@ class Player
     new_chips = @chips
     case @last_hand_result
     when Blackjack::PLAYER_HAS_BLACKJACK
-      message   += " got backjack! #{@name} won $#{(@bet * Blackjack::BLACKJACK_PAYOUT).ceil}."
+      message   += " got blackjack! #{@name} won $#{(@bet * Blackjack::BLACKJACK_PAYOUT).ceil}."
       new_chips = @chips + (@bet * Blackjack::BLACKJACK_PAYOUT).ceil
     when Blackjack::PLAYER_BUSTED
       message   += " busted with #{hand_value}. #{@name} lost #{gender.downcase == 'male' ? 'his' : 'her'} bet of $#{@bet}."

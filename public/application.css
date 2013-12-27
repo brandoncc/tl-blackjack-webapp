@@ -361,3 +361,7 @@ div#active-seat-4 {
     left: 814px;
 }
 
+div.modal-backdrop {
+    opacity: .5 !important;
+    filter: alpha(opacity=50) !important;
+}

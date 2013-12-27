@@ -1,12 +1,16 @@
-<div id="dealer-cards" class="cards">
-  <%= erb :'_dealer_score' %>
+<% if @game.game_in_progress && next_player_to_bet.nil? %>
 
-  <% if @game.all_players_finished? %>
-    <% @dealer.cards.each do |card| %>
-      <img src="<%= "#{card.image}" %>" alt=""/>
+  <div id="dealer-cards" class="cards">
+    <%= erb :'_dealer_score' %>
+
+    <% if @game.all_players_finished? %>
+      <% @dealer.cards.each do |card| %>
+        <img src="<%= "#{card.image}" %>" alt=""/>
+      <% end %>
+    <% else %>
+      <img src="/images/cards/cover.jpg"/>
+      <img src="<%= "#{@dealer.last_card.image}" %>"/>
     <% end %>
-  <% else %>
-    <img src="/images/cards/cover.jpg"/>
-    <img src="<%= "#{@dealer.last_card.image}" %>"/>
-  <% end %>
-</div>
+  </div>
+
+<% end %>

@@ -1,40 +1,53 @@
-<div id="table">
-  <div class="well lower-opacity pull-right actions-list" style="padding: 8px 14px;">
-    <%= erb :'_actions' %>
-  </div>
-  <div id="discard-pile">
-    <img src="/images/cards/cover.jpg" alt=""/>
-    <img src="/images/cards/cover.jpg" alt=""/>
-    <img src="/images/cards/cover.jpg" alt=""/>
-    <img src="/images/cards/cover.jpg" alt=""/>
-    <img src="/images/cards/cover.jpg" alt=""/>
-    <img src="/images/cards/cover.jpg" alt=""/>
-    <img src="/images/cards/cover.jpg" alt=""/>
-    <img src="/images/cards/cover.jpg" alt=""/>
-    <img src="/images/cards/cover.jpg" alt=""/>
-  </div>
-  <div id="deal-pile">
-    <img src="/images/cards/cover.jpg" style="" alt=""/>
-    <img src="/images/cards/cover.jpg" style="margin-left: -46px; margin-top: -1px;" alt=""/>
-    <img src="/images/cards/cover.jpg" style="margin-left: -46px; margin-top: -2px;" alt=""/>
-    <img src="/images/cards/cover.jpg" style="margin-left: -47px; margin-top: -3px;" alt=""/>
-    <img src="/images/cards/cover.jpg" style="margin-left: -47px; margin-top: -4px;" alt=""/>
-    <img src="/images/cards/cover.jpg" style="margin-left: -46px; margin-top: -5px;" alt=""/>
-    <img src="/images/cards/cover.jpg" style="margin-left: -46px; margin-top: -6px;" alt=""/>
-  </div>
-  <%= erb :'_dealer_cards' %>
+<div id="game">
+  <div id="table">
+    <div class="well lower-opacity pull-right actions-list" style="padding: 8px 14px;">
+      <%= erb :'_actions' %>
+    </div>
+    <div id="discard-pile">
+      <img src="/images/cards/cover.jpg" alt=""/>
+      <img src="/images/cards/cover.jpg" alt=""/>
+      <img src="/images/cards/cover.jpg" alt=""/>
+      <img src="/images/cards/cover.jpg" alt=""/>
+      <img src="/images/cards/cover.jpg" alt=""/>
+      <img src="/images/cards/cover.jpg" alt=""/>
+      <img src="/images/cards/cover.jpg" alt=""/>
+      <img src="/images/cards/cover.jpg" alt=""/>
+      <img src="/images/cards/cover.jpg" alt=""/>
+    </div>
+    <div id="deal-pile">
+      <img src="/images/cards/cover.jpg" style="" alt=""/>
+      <img src="/images/cards/cover.jpg" style="margin-left: -46px; margin-top: -1px;" alt=""/>
+      <img src="/images/cards/cover.jpg" style="margin-left: -46px; margin-top: -2px;" alt=""/>
+      <img src="/images/cards/cover.jpg" style="margin-left: -47px; margin-top: -3px;" alt=""/>
+      <img src="/images/cards/cover.jpg" style="margin-left: -47px; margin-top: -4px;" alt=""/>
+      <img src="/images/cards/cover.jpg" style="margin-left: -46px; margin-top: -5px;" alt=""/>
+      <img src="/images/cards/cover.jpg" style="margin-left: -46px; margin-top: -6px;" alt=""/>
+    </div>
+    <%= erb :'_dealer_cards' %>
 
-  <%= erb :'_player_cards' %>
-  <%= erb :'_player_name' %>
-  <%= erb :'_active_seat' %>
-  <%= erb :'_player_avatar' %>
+    <%= erb :'_player_cards' %>
+    <%= erb :'_player_name' %>
+    <%= erb :'_active_seat' %>
+    <%= erb :'_player_avatar' %>
 
-  <div class="row player-stats-section">
-    <div class="span12">
-      <%= erb :'_player_stats' %>
+    <div class="row player-stats-section">
+      <div class="span12">
+        <%= erb :'_player_stats' %>
+      </div>
     </div>
   </div>
+  <%= erb :'_game_result' %>
+  <% unless @game.game_in_progress %>
+    <%= erb :'_greet' %>
+  <% else %>
+    <% unless next_player_to_bet.nil? %>
+      <%= erb :'_bet' %>
+    <% end %>
+  <% end %>
+
+  <% if @game.game_in_progress && next_player_to_bet.nil? %>
+    <script>animateGame(<%= !@game.animation_has_been_shown %>)</script>
+    <% @game.animation_has_been_shown = true %>
+  <% end %>
+  <%= erb :'_exit_game' %>
 </div>
-<%= erb :'_game_result' %>
-<script>animateGame(<%= !@game.animation_has_been_shown %>)</script>
-<% @game.animation_has_been_shown = true %>

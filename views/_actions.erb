@@ -1,35 +1,37 @@
 <ul class="nav nav-list actions-list">
-
-  <% if @game.round_over? %>
-    <li class="nav-header">GAME ACTIONS</li>
-    <% if @game.active_players.count > 0 %>
-      <li><a href="/new_round"><i class="icon-play"></i> Play another round</a></li>
-      <li><a href="/reset_game"><i class="icon-off"></i> Restart game</a></li>
-    <% else %>
-      <li><a href="/reset_game"><i class="icon-play"></i> Play a new game</a></li>
-    <% end %>
-  <% else %>
-    <% if @game.player_turn_over?(@current_player) %>
-      <% if @game.next_player.nil? %>
-        <li><h5>Dealer's turn</h5></li>
-        <li class="divider"></li>
-
-        <li class="nav-header">DEALER ACTIONS</li>
-        <li><a href="/actions/hit/dealer"><i class="icon-thumbs-up"></i> Hit dealer's hand</a></li>
+  <% if @game.game_in_progress && next_player_to_bet.nil? %>
+    <% if @game.round_over? %>
+      <li class="nav-header">GAME ACTIONS</li>
+      <% if @game.active_players.count > 0 %>
+        <li><a href="/new_round"><i class="icon-play"></i> Play another round</a></li>
+        <li><a href="/game/reset"><i class="icon-off"></i> Restart game</a></li>
       <% else %>
-        <li class="nav-header">GAME ACTIONS</li>
-        <li>
-          <a href="/players/next"><i class="icon-play"></i> Start <%= "#{@game.next_player.name}" %>'s turn</a>
-        </li>
+        <li><a href="/game/reset"><i class="icon-play"></i> Play a new game</a></li>
       <% end %>
     <% else %>
-      <li><h5><%= @current_player.name %>'s turn</h5></li>
-      <li class="divider"></li>
-      <li class="nav-header">USER ACTIONS</li>
-      <li><a href="/actions/hit/player"><i class="icon-thumbs-up"></i> Hit</a></li>
-      <li><a href="/actions/stay/player"><i class="icon-thumbs-down"></i> Stay</a></li>
+      <% if @game.player_turn_over?(@current_player) %>
+        <% if @game.next_player.nil? %>
+          <li><h5>Dealer's turn</h5></li>
+          <li class="divider"></li>
+
+          <li class="nav-header">DEALER ACTIONS</li>
+          <li><a href="/actions/hit/dealer" id="dealer-hit"><i class="icon-thumbs-up"></i> Hit dealer's hand</a></li>
+        <% else %>
+          <li class="nav-header">GAME ACTIONS</li>
+          <li>
+            <a href="/players/next" id="player-next"><i class="icon-play"></i>
+              Start <%= "#{@game.next_player.name}" %>'s turn</a>
+          </li>
+        <% end %>
+      <% else %>
+          <li><h5><%= @current_player.name %>'s turn</h5></li>
+        <li class="divider"></li>
+        <li class="nav-header">USER ACTIONS</li>
+        <li><a href="/actions/hit/player" id="player-hit"><i class="icon-thumbs-up"></i> Hit</a></li>
+        <li><a href="/actions/stay/player" id="player-stay"><i class="icon-thumbs-down"></i> Stay</a></li>
+      <% end %>
     <% end %>
+    <li class="divider">&nbsp;</li>
+    <li><a href="/" id="exit-game-action"><i class="icon-off"></i> Exit game</a></li>
   <% end %>
-  <li class="divider">&nbsp;</li>
-  <li><a href="/"><i class="icon-off"></i> Exit game</a></li>
 </ul>

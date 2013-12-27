@@ -1,10 +1,12 @@
-<% @game.active_players.each_with_index do |p, i| %>
-  <% if p.active %>
-    <div id="player-<%= "#{i+1}" %>-cards" class="cards">
-      <%= erb :'_player_score', locals: { player_number: i } %>
-      <% p.cards.each do |card| %>
-        <img src="<%= "#{card.image}" %>"/>
-      <% end %>
-    </div>
+<% if @game.game_in_progress && next_player_to_bet.nil? %>
+  <% @game.active_players.each_with_index do |p, i| %>
+    <% if p.active %>
+      <div id="player-<%= "#{i+1}" %>-cards" class="cards">
+        <%= erb :'_player_score', locals: { player_number: i } %>
+        <% p.cards.each do |card| %>
+          <img src="<%= "#{card.image}" %>"/>
+        <% end %>
+      </div>
+    <% end %>
   <% end %>
 <% end %>
