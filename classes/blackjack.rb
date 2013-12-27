@@ -116,8 +116,7 @@ class Blackjack
 
   def round_over?
     (player_turn_over?(@current_player) && next_player.nil? && dealer_turn_over?) ||
-        (players_count == 1 && @players.first.hand_is_blackjack?) ||
-        (players_count == 1 && @players.first.hand_is_bust?)
+        (active_players.select { |p| p.hand_is_blackjack? || p.hand_is_bust? }.count == active_players.count)
   end
 
   def players_count
